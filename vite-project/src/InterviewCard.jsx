@@ -1,8 +1,10 @@
-function InterviewCard(props) {
+function InterviewCard({ title, onSelect}) {
     return (
         <div>
-            <h2>{ props.title }</h2>
-            <button>Select</button>
+            <h2>{ title }</h2>
+            <button onClick={() => onSelect(title)}>
+                Select
+            </button>
         </div>
     );
 }
