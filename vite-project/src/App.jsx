@@ -2,6 +2,7 @@ import Navbar from "./Navbar";
 import Hero from "./Hero";
 import InterviewCard from "./InterviewCard";
 import { useState } from "react";
+import "./App.css";
 const interviews = ["Frontend Interview", "Backend Interview", "AI Interview", "Java Interview"];
 
 function App() {
