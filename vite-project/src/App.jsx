@@ -34,6 +34,17 @@ const interviewQuestions = {
 function App() {
   const [selectedInterview, setSelectedInterview] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answer, setAnswer] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const handleNextQuestion = () => {
+    if(currentQuestion < interviewQuestions[selectedInterview].length - 1)
+    {
+    setCurrentQuestion(prev => prev + 1);
+    setAnswer("");
+    setSubmitted(false);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -59,11 +70,22 @@ function App() {
               { interviewQuestions [selectedInterview] [currentQuestion] }
             </p>
 
+            <input type="text"
+              placeholder="Type your answer"
+              value = { answer }
+              onChange = {(e) => setAnswer(e.target.value)} />
+
+            <button onClick={() => setSubmitted(true)}
+              >Submit Answer</button>
+
+            {
+              submitted && <p>Answer Submitted Succesfully</p>
+            }
+
+
             {
               currentQuestion < interviewQuestions[selectedInterview].length - 1 && (
-                <button onClick={() =>
-                  setCurrentQuestion(currentQuestion + 1)
-                }>
+                <button onClick={ handleNextQuestion }>
                   Next Question
                 </button>
               )
