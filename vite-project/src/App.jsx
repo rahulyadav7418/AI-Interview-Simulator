@@ -64,32 +64,61 @@ function App() {
       {
         selectedInterview && (
           <div>
-            <h3>Question:</h3>
+            
+            <h3>Question: { currentQuestion + 1 } / { interviewQuestions[selectedInterview].length}</h3>
 
             <p>
-              { interviewQuestions [selectedInterview] [currentQuestion] }
+            { interviewQuestions [selectedInterview] [currentQuestion] }
             </p>
-
-            <input type="text"
+            <br />
+            
+            <input className="input" type="text"
               placeholder="Type your answer"
               value = { answer }
               onChange = {(e) => setAnswer(e.target.value)} />
 
-            <button onClick={() => setSubmitted(true)}
-              >Submit Answer</button>
-
+            <button className="submit" onClick={() => {
+              if(answer.trim() === "") {
+                alert("Please enter an answer!");
+                return;
+              }
+              setSubmitted(true);
+              setAnswer("");
+            }}
+              >Submit</button>
+            
             {
-              submitted && <p>Answer Submitted Succesfully</p>
+              submitted && <p className="submitted">Answer Submitted Succesfully!</p>
             }
-
 
             {
               currentQuestion < interviewQuestions[selectedInterview].length - 1 && (
-                <button onClick={ handleNextQuestion }>
-                  Next Question
+                <button className="next" onClick={ handleNextQuestion }>
+                  Next
                 </button>
               )
             }
+
+            {
+              currentQuestion === interviewQuestions[selectedInterview].length - 1
+              &&
+              submitted && (
+                <>
+              <h3>Interview Completed!</h3>
+
+              <button onClick={() => {
+              setSelectedInterview("");
+              setCurrentQuestion(0);
+              setAnswer("");
+              setSubmitted(false);
+              }}>
+              Start New
+              </button>
+              </>
+              )
+            }
+            
+             
           </div>
         )
       }

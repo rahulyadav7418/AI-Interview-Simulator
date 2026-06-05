@@ -40,12 +40,41 @@ button {
   background-color: #444;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   transition: background-color 0.3s;
+  height: 40px;
+  padding: 5px;
+  width: 100px;
+  margin: 10px;
 }
 
 button:hover {
   background-color: #222;
   cursor: pointer;
   transform: scale(1.02);
+}
+
+.submit {
+  color: green;
+  margin-left: 5px;
+}
+
+.submitted {
+  color: green;
+  font-size: 20px;
+}
+
+
+.next {
+  margin-left: 5px;
+}
+
+.input {
+  width: 250px;
+  height: 25px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 20px;
+  border-style: dotted;
+  margin-right: 5px;
 }
