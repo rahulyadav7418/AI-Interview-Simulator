@@ -21,7 +21,6 @@
   transition: transform 0.3s, box-shadow 0.3s;
   text-align: center;
   font-family: 'Arial', sans-serif;
-  cursor: pointer;
 }
 
 .card:hover {

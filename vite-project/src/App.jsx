@@ -72,23 +72,31 @@ function App() {
             </p>
             <br />
             
-            <input className="input" type="text"
-              placeholder="Type your answer"
-              value = { answer }
-              onChange = {(e) => setAnswer(e.target.value)} />
-
-            <button className="submit" onClick={() => {
-              if(answer.trim() === "") {
-                alert("Please enter an answer!");
-                return;
-              }
-              setSubmitted(true);
-              setAnswer("");
-            }}
-              >Submit</button>
-            
             {
-              submitted && <p className="submitted">Answer Submitted Succesfully!</p>
+              !(currentQuestion === interviewQuestions[selectedInterview].length - 1
+                && submitted) && (
+                <>
+                  <input className="input" type="text"
+                    placeholder="Type your answer"
+                    value = { answer }
+                    onChange = {(e) => setAnswer(e.target.value)} />
+
+                  <button className="submit" onClick={() => {
+                    if(answer.trim() === "") {
+                    alert("Please enter an answer!");
+                    return;
+                    }
+                    setSubmitted(true);
+                    setAnswer("");
+                  }}
+                    >Submit</button>
+            
+                </>
+              )
+            }
+
+            {
+              submitted && <p className="submitted">Answer Submitted Successfully!</p>
             }
 
             {
@@ -105,15 +113,15 @@ function App() {
               submitted && (
                 <>
               <h3>Interview Completed!</h3>
+              <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
+              <p>Score: {2 * (interviewQuestions[selectedInterview].length)}</p>
 
               <button onClick={() => {
               setSelectedInterview("");
               setCurrentQuestion(0);
               setAnswer("");
               setSubmitted(false);
-              }}>
-              Start New
-              </button>
+              }}> Start New </button>
               </>
               )
             }
