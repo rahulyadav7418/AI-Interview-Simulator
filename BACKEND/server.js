@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const Interview = require("./models/interview.js");
+
+app.use(express.json());
 
 
 main()
@@ -14,26 +17,19 @@ async function main() {
   await mongoose.connect('mongodb://127.0.0.1:27017/AiInterviewSimulator');
 }
 
-const interviewSchema = new mongoose.Schema({
-    name: String,
-    interviewType: String,
-    score: Number
+
+//fetch the data
+app.get("/interviews", async (req, res) => {
+    const data = await Interview.find();
+    res.json(data);
 });
 
-const Interview = mongoose.model("Interview", interviewSchema);
-
-let firstInterview = new Interview({
-    name: "Rahul",
-    interviewType: "java",
-    Score: 6
+//post the data
+app.post("/interviews", async (req, res) => {
+    const newInterview = new Interview(req.body);
+    await newInterview.save();
+    res.send("Data Saved");
 });
-
-firstInterview.save().then((res) => {
-    console.log(res);
-}).catch((err) => {
-    console.log(err);
-});
-
 
 app.get("/", (req, res) => {
     res.send("Server is running");
