@@ -31,6 +31,13 @@ app.post("/interviews", async (req, res) => {
     res.send("Data Saved");
 });
 
+//destroy
+app.delete("/interviews/:id", async (req, res) => {
+    let deletedInterview = await Interview.findByIdAndDelete(req.params.id);
+    console.log(deletedInterview);
+    res.send("Interview deleted successfully");
+});
+
 app.get("/", (req, res) => {
     res.send("Server is running");
 });
