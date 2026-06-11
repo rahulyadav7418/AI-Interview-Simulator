@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Interview = require("./models/interview.js");
+const cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 
 
@@ -36,6 +38,16 @@ app.delete("/interviews/:id", async (req, res) => {
     let deletedInterview = await Interview.findByIdAndDelete(req.params.id);
     console.log(deletedInterview);
     res.send("Interview deleted successfully");
+});
+
+//Update
+app.put("/interviews/:id", async (req, res) => {
+    let updatedInterview = await Interview.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true}
+    );
+    res.json(updatedInterview);
 });
 
 app.get("/", (req, res) => {

@@ -1,37 +1,60 @@
 import Navbar from "./Navbar";
 import Hero from "./Hero";
 import InterviewCard from "./InterviewCard";
-import { useState } from "react";
+// import { useState } from "react";
 import "./App.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 const interviews = ["Frontend Interview", "Backend Interview", "AI Interview", "Java Interview"];
 const interviewQuestions = {
-  "Frontend Interview": [
-    "What is React?",
-    "What is JSX?",
-    "What is Virtual Dom?"
-  ],
+  // "Frontend Interview": [
+  //   "What is React?",
+  //   "What is JSX?",
+  //   "What is Virtual Dom?"
+  // ],
 
-  "Backend Interview": [
-    "What is Node.js?",
-    "What is Express.js?",
-    "What is API?"
-  ],
+  // "Backend Interview": [
+  //   "What is Node.js?",
+  //   "What is Express.js?",
+  //   "What is API?"
+  // ],
 
-  "AI Interview": [
+
+  AI: [
     "What is AI?",
     "What is Machine Learning?",
     "What is Deep Learning?"
   ],
 
-  "Java Interview": [
+  Java: [
     "What is OOP?",
     "What is Inheritence?",
     "What is Polimorphism?"
   ],
 
+  "AI/ML": [
+    "What is AI?",
+    "What is Machine Learning?",
+    "What is Deep Learning?"
+  ],
+
 };
 
 function App() {
+  const [interviews, setInterviews] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/interviews")
+    .then((res) => {
+      setInterviews(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
+  console.log(interviews);
+
   const [selectedInterview, setSelectedInterview] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -44,6 +67,7 @@ function App() {
     setSubmitted(false);
     }
   };
+  console.log(selectedInterview);
 
   return (
     <div>
@@ -52,7 +76,7 @@ function App() {
       {
         interviews.map((item, index) => (
           <InterviewCard key = { index }
-          title = { item } 
+          interview = { item } 
           onSelect = { setSelectedInterview }
           />
         ))

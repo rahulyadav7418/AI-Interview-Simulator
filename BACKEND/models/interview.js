@@ -15,18 +15,18 @@ const Interview = mongoose.model("Interview", interviewSchema);
 //     difficulty: "Medium"
 // });
 
-let newInterview = new Interview({
-        name: "Sujeet",
-        interviewType: "AI",
-        score: 6,
-        difficulty: "Medium"
-    });
+// let newInterview = new Interview({
+//         name: "Sachin",
+//         interviewType: "Java",
+//         score: 6,
+//         difficulty: "Easy"
+//     });
 
-newInterview.save().then((res) => {
-    console.log(res);
-}).catch((err) => {
-    console.log(err);
-});
+// newInterview.save().then((res) => {
+//     console.log(res);
+// }).catch((err) => {
+//     console.log(err);
+// });
 
 
 module.exports = Interview;
