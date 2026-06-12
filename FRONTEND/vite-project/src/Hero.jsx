@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-function Hero() {
-    const [name, setName] = useState("");
+function Hero({name, setName}) {
+    // const [name, setName] = useState("");
     const [started, setStarted] = useState(false);
     return (
         <div>

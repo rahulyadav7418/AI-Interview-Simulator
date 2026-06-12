@@ -1,53 +1,58 @@
 import Navbar from "./Navbar";
 import Hero from "./Hero";
 import InterviewCard from "./InterviewCard";
-// import { useState } from "react";
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 const interviews = ["Frontend Interview", "Backend Interview", "AI Interview", "Java Interview"];
 const interviewQuestions = {
-  // "Frontend Interview": [
-  //   "What is React?",
-  //   "What is JSX?",
-  //   "What is Virtual Dom?"
-  // ],
+  "Frontend Interview": [
+    "What is React?",
+    "What is JSX?",
+    "What is Virtual Dom?"
+  ],
 
-  // "Backend Interview": [
-  //   "What is Node.js?",
-  //   "What is Express.js?",
-  //   "What is API?"
-  // ],
+  "Backend Interview": [
+    "What is Node.js?",
+    "What is Express.js?",
+    "What is API?"
+  ],
 
-
-  AI: [
+  "AI Interview": [
     "What is AI?",
     "What is Machine Learning?",
     "What is Deep Learning?"
   ],
 
-  Java: [
+  "Java Interview": [
     "What is OOP?",
     "What is Inheritence?",
     "What is Polimorphism?"
   ],
 
-  "AI/ML": [
-    "What is AI?",
-    "What is Machine Learning?",
-    "What is Deep Learning?"
-  ],
+  // "AI/ML": [
+  //   "What is AI?",
+  //   "What is Machine Learning?",
+  //   "What is Deep Learning?"
+  // ],
 
 };
 
 function App() {
-  const [interviews, setInterviews] = useState([]);
+
+  const [score, setScore] = ("");
+
+  const [name, setName] = useState("");
+
+  const [interviews, setInterviews] = useState([
+    "Frontend Interview", "Backend Interview", "AI Interview", "Java Interview"
+  ]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/interviews")
     .then((res) => {
-      setInterviews(res.data);
+      // setInterviews(res.data);
     }).catch((err) => {
       console.log(err);
     });
@@ -72,7 +77,9 @@ function App() {
   return (
     <div>
       <Navbar />
-      <Hero />
+      <>
+      <Hero name={name} setName={setName}/>
+      </>
       {
         interviews.map((item, index) => (
           <InterviewCard key = { index }
@@ -111,6 +118,7 @@ function App() {
                     return;
                     }
                     setSubmitted(true);
+                    setScore(prev => prev + 2);
                     setAnswer("");
                   }}
                     >Submit</button>
@@ -138,13 +146,25 @@ function App() {
                 <>
               <h3>Interview Completed!</h3>
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
-              <p>Score: {2 * (interviewQuestions[selectedInterview].length)}</p>
 
               <button onClick={() => {
-              setSelectedInterview("");
-              setCurrentQuestion(0);
-              setAnswer("");
-              setSubmitted(false);
+                axios.post("http://localhost:8080/interviews", {
+                  name,
+                  interviewType: selectedInterview,
+                  score: score
+                  
+                }).then(() => {
+                  console.log("Saved Succefully");
+
+                }).catch((err) => {
+                  console.log(err);
+                });
+            
+                setSelectedInterview("");
+                setCurrentQuestion(0);
+                setAnswer("");
+                setSubmitted(false);
+                setScore(0);
               }}> Start New </button>
               </>
               )

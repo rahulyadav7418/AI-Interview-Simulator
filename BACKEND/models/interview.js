@@ -17,7 +17,7 @@ const Interview = mongoose.model("Interview", interviewSchema);
 
 // let newInterview = new Interview({
 //         name: "Sachin",
-//         interviewType: "Java",
+//         interviewType: "Backend",
 //         score: 6,
 //         difficulty: "Easy"
 //     });
