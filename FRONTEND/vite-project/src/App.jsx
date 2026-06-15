@@ -41,7 +41,7 @@ const interviewQuestions = {
 
 function App() {
 
-  const [score, setScore] = ("");
+  const [score, setScore] = useState(0);
 
   const [name, setName] = useState("");
 
@@ -64,6 +64,7 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
+
   const handleNextQuestion = () => {
     if(currentQuestion < interviewQuestions[selectedInterview].length - 1)
     {
@@ -73,6 +74,18 @@ function App() {
     }
   };
   console.log(selectedInterview);
+
+  const handleSubmit = () => {
+    if(submitted) return;
+
+    if(answer.trim() === "") {
+      alert("Please enter an answer!");
+      return;
+    }
+    setSubmitted(true);
+    setScore(prev => prev + 2);
+    setAnswer("");
+  }
 
   return (
     <div>
@@ -111,17 +124,12 @@ function App() {
                     placeholder="Type your answer"
                     value = { answer }
                     onChange = {(e) => setAnswer(e.target.value)} />
-
-                  <button className="submit" onClick={() => {
-                    if(answer.trim() === "") {
-                    alert("Please enter an answer!");
-                    return;
-                    }
-                    setSubmitted(true);
-                    setScore(prev => prev + 2);
-                    setAnswer("");
-                  }}
-                    >Submit</button>
+                  
+                  <button className="submit"
+                  onClick={ handleSubmit }
+                  disabled={ submitted }>
+                    Submit
+                  </button>
             
                 </>
               )
@@ -146,6 +154,7 @@ function App() {
                 <>
               <h3>Interview Completed!</h3>
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
+              <h2>Score: {score}</h2>
 
               <button onClick={() => {
                 axios.post("http://localhost:8080/interviews", {
