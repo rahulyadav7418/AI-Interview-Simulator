@@ -85,6 +85,19 @@ function App() {
     setSubmitted(true);
     setScore(prev => prev + 2);
     setAnswer("");
+
+    setTimeout(() => {
+      setCurrentQuestion(prev => {
+        if(prev + 1 >= interviewQuestions[selectedInterview].length) {
+          setSubmitted(true); //or show final screen
+          return prev; //stop increasing
+        }
+        return prev + 1;
+      });
+
+      setAnswer("");
+      setSubmitted(false);
+    }, 200);
   }
 
   return (
@@ -139,13 +152,13 @@ function App() {
               submitted && <p className="submitted">Answer Submitted Successfully!</p>
             }
 
-            {
+            {/* {
               currentQuestion < interviewQuestions[selectedInterview].length - 1 && (
                 <button className="next" onClick={ handleNextQuestion }>
                   Next
                 </button>
               )
-            }
+            } */}
 
             {
               currentQuestion === interviewQuestions[selectedInterview].length - 1
