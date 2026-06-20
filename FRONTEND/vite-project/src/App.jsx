@@ -88,16 +88,38 @@ function App() {
 
     setTimeout(() => {
       setCurrentQuestion(prev => {
-        if(prev + 1 >= interviewQuestions[selectedInterview].length) {
+        const next = prev + 1;
+        if(next >= interviewQuestions[selectedInterview].length) {
           setSubmitted(true); //or show final screen
           return prev; //stop increasing
         }
-        return prev + 1;
+        return next;
       });
 
       setAnswer("");
       setSubmitted(false);
-    }, 200);
+    }, 800);
+  }
+
+  const handleStartNew = () => {
+    axios.post("http://localhost:8080/interviews", {
+      name,
+      interviewType: selectedInterview,
+      score: score
+                  
+    }).then(() => {
+      console.log("Saved Succefully");
+
+    }).catch((err) => {
+      console.log(err);
+    });
+            
+    setSelectedInterview("");
+    setCurrentQuestion(0);
+    setAnswer("");
+    setSubmitted(false);
+    setScore(0);
+    setSelectedInterview(null);
   }
 
   return (
@@ -165,29 +187,21 @@ function App() {
               &&
               submitted && (
                 <>
+                <div className="result-box"></div>
               <h3>Interview Completed!</h3>
+              <h3>Name: {name} </h3>
+              <p>Interview: {selectedInterview}</p>
+              <br />
+              <h3>Results:</h3>
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
-              <h2>Score: {score}</h2>
-
-              <button onClick={() => {
-                axios.post("http://localhost:8080/interviews", {
-                  name,
-                  interviewType: selectedInterview,
-                  score: score
-                  
-                }).then(() => {
-                  console.log("Saved Succefully");
-
-                }).catch((err) => {
-                  console.log(err);
-                });
-            
-                setSelectedInterview("");
-                setCurrentQuestion(0);
-                setAnswer("");
-                setSubmitted(false);
-                setScore(0);
-              }}> Start New </button>
+              <p>Score: {score}</p>
+              <p>Percentage: {" "}
+                {(
+                  (score / (interviewQuestions[selectedInterview].length * 2)) * 100)
+                  .toFixed(0)}%
+              </p>
+              <button onClick={handleStartNew}
+                > Start New </button>
               </>
               )
             }
