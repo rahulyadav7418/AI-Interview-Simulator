@@ -1,17 +1,34 @@
 import { useState } from "react";
 
-function Hero({name, setName}) {
-    // const [name, setName] = useState("");
-    const [started, setStarted] = useState(false);
+function Hero({name, setName, started, setStarted, selectedInterview}) {
     return (
         <div>
-        <h1>Mock Interview Platform</h1>
-        <input type="text" placeholder="Enter your name" onChange={(e) => setName(e.target.value)}/>
-        <br /><br />
-        <h2>Welcome { name }</h2>
-        <button onClick={() => setStarted(true)}>
-            Start Interview</button>
-        {started && <h3>Interview running</h3>}
+        
+          <h1>Mock Interview Platform</h1>
+
+          {!started && (
+           <>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                onChange={(e) => setName(e.target.value)}
+               />
+
+               <br /><br />
+
+               <button
+               onClick={() => setStarted(true)}
+               disabled={!name.trim()}
+               >
+               Start Interview
+               </button>
+            </>
+          )}
+
+              {started && !selectedInterview && (
+                <h2>Welcome {name} 👋</h2>
+               )}
+  
         </div>
     );
 }

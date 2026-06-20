@@ -40,6 +40,7 @@ const interviewQuestions = {
 };
 
 function App() {
+  const [started, setStarted] = useState(false);
 
   const [score, setScore] = useState(0);
 
@@ -119,25 +120,39 @@ function App() {
     setAnswer("");
     setSubmitted(false);
     setScore(0);
-    setSelectedInterview(null);
   }
 
   return (
     <div>
       <Navbar />
       <>
-      <Hero name={name} setName={setName}/>
+        <Hero
+          name={name}
+          setName={setName}
+          started={started}
+          setStarted={setStarted}
+          selectedInterview={selectedInterview}
+        />
       </>
       {
-        interviews.map((item, index) => (
-          <InterviewCard key = { index }
-          interview = { item } 
-          onSelect = { setSelectedInterview }
+        started &&
+        !selectedInterview &&
+          interviews.map((item, index) => (
+          <InterviewCard
+            key={index}
+            interview={item}
+            onSelect={setSelectedInterview}
           />
-        ))
+  ))
+        // interviews.map((item, index) => (
+        //   <InterviewCard key = { index }
+        //   interview = { item } 
+        //   onSelect = { setSelectedInterview }
+        //   />
+        // ))
       }
 
-      { selectedInterview && ( <h2> Selected Interview: {selectedInterview}</h2>
+      { selectedInterview && ( <h2>{selectedInterview}</h2>
       )}
 
       {
