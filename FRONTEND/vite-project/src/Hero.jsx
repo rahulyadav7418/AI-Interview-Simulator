@@ -4,7 +4,7 @@ function Hero({name, setName, started, setStarted, selectedInterview}) {
     return (
         <div>
         
-          <h1>Mock Interview Platform</h1>
+          {!started && <h1>Mock Interview Platform</h1>}
 
           {!started && (
            <>

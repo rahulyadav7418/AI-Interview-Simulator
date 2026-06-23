@@ -77,3 +77,18 @@ button:hover {
   border-style: dotted;
   margin-right: 5px;
 }
+
+.back-btn {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 20px;
+}
+
+.title {
+  color: #2563EB;
+}
+
+.message-box {
+  height: 30px;
+  color: green;
+}

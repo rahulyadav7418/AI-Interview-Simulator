@@ -74,9 +74,12 @@ function App() {
     setSubmitted(false);
     }
   };
-  console.log(selectedInterview);
+  //console.log(selectedInterview);
 
   const handleSubmit = () => {
+    console.log("Submit clicked");
+    console.log("Current Question:", currentQuestion);
+
     if(submitted) return;
 
     if(answer.trim() === "") {
@@ -85,12 +88,13 @@ function App() {
     }
     setSubmitted(true);
     setScore(prev => prev + 2);
+    console.log("Score updating", score);
     setAnswer("");
 
     setTimeout(() => {
       setCurrentQuestion(prev => {
-        const next = prev + 1;
-        if(next >= interviewQuestions[selectedInterview].length) {
+         const next = prev + 1;
+         if(next >= interviewQuestions[selectedInterview].length) {
           setSubmitted(true); //or show final screen
           return prev; //stop increasing
         }
@@ -114,7 +118,9 @@ function App() {
     }).catch((err) => {
       console.log(err);
     });
-            
+    
+    setName("");
+    setStarted(false);
     setSelectedInterview("");
     setCurrentQuestion(0);
     setAnswer("");
@@ -124,7 +130,22 @@ function App() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar
+         showBack={started || selectedInterview}
+           onBack={() => {
+  if (selectedInterview) {
+    setSelectedInterview("");
+    setCurrentQuestion(0);
+    setAnswer("");
+    setSubmitted(false);
+    setScore(0); // Add this
+  } else {
+    setStarted(false);
+    setName("");
+  }
+}}
+      />
+
       <>
         <Hero
           name={name}
@@ -141,8 +162,9 @@ function App() {
           <InterviewCard
             key={index}
             interview={item}
-            onSelect={setSelectedInterview}
+            onSelect={handleInterviewSelect}
           />
+
   ))
         // interviews.map((item, index) => (
         //   <InterviewCard key = { index }
@@ -152,8 +174,7 @@ function App() {
         // ))
       }
 
-      { selectedInterview && ( <h2>{selectedInterview}</h2>
-      )}
+      { selectedInterview && ( <h2>{selectedInterview}</h2> )}
 
       {
         selectedInterview && (
@@ -186,16 +207,16 @@ function App() {
             }
 
             {
-              submitted && <p className="submitted">Answer Submitted Successfully!</p>
-            }
-
-            {/* {
               currentQuestion < interviewQuestions[selectedInterview].length - 1 && (
                 <button className="next" onClick={ handleNextQuestion }>
-                  Next
+                  Skip
                 </button>
               )
-            } */}
+            }
+            
+            <div className="message-box">
+                  {submitted && <p>Answer Submitted Successfully!</p>}
+            </div>
 
             {
               currentQuestion === interviewQuestions[selectedInterview].length - 1

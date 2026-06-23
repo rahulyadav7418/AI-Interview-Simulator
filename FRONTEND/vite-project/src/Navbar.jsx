@@ -1,7 +1,14 @@
-function Navbar() {
+function Navbar({ showBack, onBack, started, setStarted }) {
     return (
         <nav>
-            <h2>AI Interview Simulator</h2>
+            {showBack && (
+            <button className= "back-btn"
+            onClick={onBack}>
+            ← Back
+            </button>
+           )}
+            {!started && <h2 className="title">AI Interview Simulator</h2>}
+            <br />
         </nav>
     );
 }
