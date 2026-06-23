@@ -133,17 +133,17 @@ function App() {
       <Navbar
          showBack={started || selectedInterview}
            onBack={() => {
-  if (selectedInterview) {
-    setSelectedInterview("");
-    setCurrentQuestion(0);
-    setAnswer("");
-    setSubmitted(false);
-    setScore(0); // Add this
-  } else {
-    setStarted(false);
-    setName("");
-  }
-}}
+             if (selectedInterview) {
+                setSelectedInterview("");
+                setCurrentQuestion(0);
+                setAnswer("");
+                setSubmitted(false);
+                setScore(0);
+              } else {
+                setStarted(false);
+                setName("");
+              }
+            }}
       />
 
       <>
@@ -162,7 +162,7 @@ function App() {
           <InterviewCard
             key={index}
             interview={item}
-            onSelect={handleInterviewSelect}
+            onSelect={setSelectedInterview}
           />
 
   ))
