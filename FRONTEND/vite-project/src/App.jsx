@@ -40,6 +40,7 @@ const interviewQuestions = {
 };
 
 function App() {
+
   const [started, setStarted] = useState(false);
 
   const [score, setScore] = useState(0);
@@ -77,8 +78,8 @@ function App() {
   //console.log(selectedInterview);
 
   const handleSubmit = () => {
-    console.log("Submit clicked");
-    console.log("Current Question:", currentQuestion);
+    // console.log("Submit clicked");
+    // console.log("Current Question:", currentQuestion);
 
     if(submitted) return;
 
@@ -88,7 +89,7 @@ function App() {
     }
     setSubmitted(true);
     setScore(prev => prev + 2);
-    console.log("Score updating", score);
+    // console.log("Score updating", score);
     setAnswer("");
 
     setTimeout(() => {
@@ -127,6 +128,9 @@ function App() {
     setSubmitted(false);
     setScore(0);
   }
+
+  const interviewCompleted = selectedInterview && currentQuestion === interviewQuestions[selectedInterview].length - 1
+  && submitted;
 
   return (
     <div>
@@ -174,18 +178,23 @@ function App() {
         // ))
       }
 
-      { selectedInterview && ( <h2>{selectedInterview}</h2> )}
+
+      { selectedInterview && !interviewCompleted && ( <h2>{selectedInterview}</h2> )}
 
       {
         selectedInterview && (
           <div>
             
+            {!interviewCompleted && (
+              <>
             <h3>Question: { currentQuestion + 1 } / { interviewQuestions[selectedInterview].length}</h3>
 
             <p>
             { interviewQuestions [selectedInterview] [currentQuestion] }
             </p>
             <br />
+            </>
+            )}
             
             {
               !(currentQuestion === interviewQuestions[selectedInterview].length - 1
@@ -215,7 +224,10 @@ function App() {
             }
             
             <div className="message-box">
-                  {submitted && <p>Answer Submitted Successfully!</p>}
+                  {submitted && !interviewCompleted && (
+                    <p>Answer Submitted Successfully!</p>
+                  )}
+
             </div>
 
             {
@@ -223,21 +235,21 @@ function App() {
               &&
               submitted && (
                 <>
-                <div className="result-box"></div>
-              <h3>Interview Completed!</h3>
+                <div className="result-box">
+              <h2>🎉 Interview Completed!</h2>
+              <br />
               <h3>Name: {name} </h3>
               <p>Interview: {selectedInterview}</p>
               <br />
-              <h3>Results:</h3>
+              <h2>Results:</h2>
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
               <p>Score: {score}</p>
               <p>Percentage: {" "}
-                {(
-                  (score / (interviewQuestions[selectedInterview].length * 2)) * 100)
-                  .toFixed(0)}%
+                {percentage.toFixed(0)}%
               </p>
               <button onClick={handleStartNew}
                 > Start New </button>
+                </div>
               </>
               )
             }

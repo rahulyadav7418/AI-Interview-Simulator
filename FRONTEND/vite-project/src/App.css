@@ -78,17 +78,36 @@ button:hover {
   margin-right: 5px;
 }
 
+.message-box {
+  height: 30px;
+  color: green;
+}
+
 .back-btn {
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px 20px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
 }
 
 .title {
   color: #2563EB;
+  margin: 0;
 }
 
-.message-box {
-  height: 30px;
-  color: green;
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px;
+
+}
+
+.result-box {
+  background: #1a1a2e;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
 }

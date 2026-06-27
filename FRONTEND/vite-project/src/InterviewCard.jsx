@@ -4,8 +4,8 @@ function InterviewCard({ interview, onSelect}) {
         <div className="card">
             <h2> {interview} </h2>
             <button onClick={() => {
-                console.log("Button clicked");
-                console.log(interview);
+                // console.log("Button clicked");
+                // console.log(interview);
                 onSelect(interview)}}>
                 Select
             </button>
