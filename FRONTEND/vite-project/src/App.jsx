@@ -66,6 +66,10 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  
+  const percentage = selectedInterview
+  ? (score / (interviewQuestions[selectedInterview].length * 2)) * 100
+  : 0;
 
   const handleNextQuestion = () => {
     if(currentQuestion < interviewQuestions[selectedInterview].length - 1)
@@ -89,7 +93,6 @@ function App() {
     }
     setSubmitted(true);
     setScore(prev => prev + 2);
-    // console.log("Score updating", score);
     setAnswer("");
 
     setTimeout(() => {
@@ -169,13 +172,7 @@ function App() {
             onSelect={setSelectedInterview}
           />
 
-  ))
-        // interviews.map((item, index) => (
-        //   <InterviewCard key = { index }
-        //   interview = { item } 
-        //   onSelect = { setSelectedInterview }
-        //   />
-        // ))
+        ))
       }
 
 
@@ -244,8 +241,14 @@ function App() {
               <h2>Results:</h2>
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
               <p>Score: {score}</p>
-              <p>Percentage: {" "}
-                {percentage.toFixed(0)}%
+              <p> Percentage: {percentage.toFixed(0)}% </p>
+              <p>
+                { percentage >= 80
+                  ? "Excellent Performance 🚀"
+                  : percentage >= 60
+                  ? "Good Performance 👍"
+                  : "Keep Practicing 💪"
+                }
               </p>
               <button onClick={handleStartNew}
                 > Start New </button>
