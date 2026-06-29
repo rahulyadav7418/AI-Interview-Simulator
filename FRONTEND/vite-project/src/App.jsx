@@ -72,12 +72,14 @@ function App() {
   : 0;
 
   const handleNextQuestion = () => {
-    if(currentQuestion < interviewQuestions[selectedInterview].length - 1)
-    {
-    setCurrentQuestion(prev => prev + 1);
-    setAnswer("");
-    setSubmitted(false);
-    }
+    if (currentQuestion < interviewQuestions[selectedInterview].length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+        setAnswer("");
+        setSubmitted(false);
+    } else {
+        // Last question skipped
+        setSubmitted(true);
+      }
   };
   //console.log(selectedInterview);
 
@@ -213,7 +215,7 @@ function App() {
             }
 
             {
-              currentQuestion < interviewQuestions[selectedInterview].length - 1 && (
+              !interviewCompleted && (
                 <button className="next" onClick={ handleNextQuestion }>
                   Skip
                 </button>
@@ -238,10 +240,12 @@ function App() {
               <h3>Name: {name} </h3>
               <p>Interview: {selectedInterview}</p>
               <br />
-              <h2>Results:</h2>
+              <hr />{/* <h2>Results:</h2> */}
+              <br />
               <p>Total Questions: {interviewQuestions[selectedInterview].length}</p>
               <p>Score: {score}</p>
               <p> Percentage: {percentage.toFixed(0)}% </p>
+              <br />
               <p>
                 { percentage >= 80
                   ? "Excellent Performance 🚀"
@@ -250,6 +254,7 @@ function App() {
                   : "Keep Practicing 💪"
                 }
               </p>
+              <br />
               <button onClick={handleStartNew}
                 > Start New </button>
                 </div>
