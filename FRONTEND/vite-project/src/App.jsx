@@ -51,6 +51,9 @@ function App() {
     "Frontend Interview", "Backend Interview", "AI Interview", "Java Interview"
   ]);
 
+  const [answer, setAnswer] = useState("");
+  const [answers, setAnswers] = useState([]);
+
   useEffect(() => {
     axios.get("http://localhost:8080/interviews")
     .then((res) => {
@@ -60,11 +63,14 @@ function App() {
     });
   }, []);
 
+  // useEffect(() => {
+  //   console.log(answers);
+  // }, [answers]);
+
   console.log(interviews);
 
   const [selectedInterview, setSelectedInterview] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
   
   const percentage = selectedInterview
@@ -95,7 +101,16 @@ function App() {
     }
     setSubmitted(true);
     setScore(prev => prev + 2);
+
+    setAnswers(prev => [
+        ...prev,
+      {
+        question: interviewQuestions[selectedInterview][currentQuestion],
+        answer: answer
+      }
+    ]);
     setAnswer("");
+    setAnswer([]);
 
     setTimeout(() => {
       setCurrentQuestion(prev => {
@@ -116,7 +131,9 @@ function App() {
     axios.post("http://localhost:8080/interviews", {
       name,
       interviewType: selectedInterview,
-      score: score
+      answers: answers,
+      score: score,
+      percentage: percentage.toFixed(0)
                   
     }).then(() => {
       console.log("Saved Succefully");

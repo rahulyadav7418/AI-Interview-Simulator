@@ -3,7 +3,14 @@ const mongoose = require("mongoose");
 const interviewSchema = new mongoose.Schema({
     name: String,
     interviewType: String,
-    score: Number
+    answers: [
+      {
+        question: String,
+        answer: String
+      }
+    ],
+    score: Number,
+    percentage: Number
 });
 
 const Interview = mongoose.model("Interview", interviewSchema);
