@@ -2,12 +2,14 @@ import { useState } from "react";
 
 function Hero({name, setName, started, setStarted, selectedInterview}) {
     return (
-        <div>
+        <div className="top-content">
         
           {!started && <h1>Mock Interview Platform</h1>}
 
           {!started && (
-           <>
+           <> 
+              <h3>Welcome to you On this Interview plateform</h3>
+              <label htmlFor="name" className="name"><b>Name: </b></label>
               <input
                 type="text"
                 placeholder="Enter your name"

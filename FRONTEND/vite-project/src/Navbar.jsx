@@ -7,7 +7,18 @@ function Navbar({ showBack, onBack, started, setStarted }) {
              ←
             </button>
            )}
-            {!started && <h2 className="title">AI Interview Simulator</h2>}
+
+           <div className="navbar-title">
+            🤖<b>AI Interview Simulator</b>
+            </div>
+
+            {!started && (
+                <div className="navbar-links">
+                    <a href="/">Home</a>
+                    <a href="/interviews">My Interviews</a>
+                    <a href="/profile">Profile</a>
+                </div>
+            )}
             <br />
         </nav>
     );

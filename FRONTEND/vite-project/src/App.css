@@ -111,3 +111,99 @@ button:hover {
   border-radius: 12px;
   margin-top: 20px;
 }
+
+/* Navbar */
+.nav-content {
+  width: 100%;
+  background-color: #fdfdfd;
+  position: fixed;
+}
+.navbar-links {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.navbar-links a {
+  text-decoration: none;
+}
+
+/* Home Page */
+/* Interview Mode Selection */
+
+.mode-container {
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.mode-container h2 {
+  font-size: 32px;
+  margin-bottom: 35px;
+}
+
+.mode-options {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.mode-card {
+  width: 420px;
+  min-height: 300px;
+  padding: 30px;
+  border-radius: 18px;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mode-card:hover {
+  /* transform: translateY(-6px); */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.mode-icon {
+  font-size: 50px;
+  margin-bottom: 15px;
+}
+
+.mode-card h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.mode-card p {
+  font-size: 17px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.mode-card button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .mode-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mode-card {
+    width: 90%;
+    max-width: 420px;
+  }
+}
+
+.top-content {
+  margin-top: 3rem;
+}
