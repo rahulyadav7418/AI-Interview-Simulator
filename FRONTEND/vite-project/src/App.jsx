@@ -58,6 +58,8 @@ function App() {
     "Java Interview",
   ]);
 
+  const [difficulty, setDifficulty] = useState("");
+
   const [answer, setAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
 
@@ -119,7 +121,6 @@ function App() {
       },
     ]);
     setAnswer("");
-    setAnswer([]);
 
     setTimeout(() => {
       setCurrentQuestion((prev) => {
@@ -171,14 +172,24 @@ function App() {
       <Navbar
         showBack={started || selectedInterview || interviewMode}
         onBack={() => {
-          if (selectedInterview) {
+          if (selectedInterview && difficulty) {
+            setDifficulty("");
+            // setSelectedInterview("");
+            setCurrentQuestion(0);
+            setAnswer("");
+            setSubmitted(false);
+            setScore(0);
+
+          } else if(selectedInterview) {
             setSelectedInterview("");
             setCurrentQuestion(0);
             setAnswer("");
             setSubmitted(false);
             setScore(0);
+
           } else if (interviewMode) {
             setInterviewMode("");
+
           } else {
             setStarted(false);
             setName("");
@@ -235,22 +246,62 @@ function App() {
         </div>
       )}
 
-      {
-        started && interviewMode === "skills" &&
-        !selectedInterview &&
-        interviews.map((item, index) => (
+      {started && interviewMode === "skills" &&
+      !selectedInterview &&
+      interviews.map((item, index) => (
         <InterviewCard
         key={index}
         interview={item}
-
         onSelect={setSelectedInterview}
         />
-        ))
-      }
+      ))}
 
-      {selectedInterview && !interviewCompleted && <h2>{selectedInterview}</h2>}
+      {started &&
+        interviewMode === "skills" &&
+        !selectedInterview &&
+        interviews.map((item, index) => (
+          <InterviewCard
+            key={index}
+            interview={item}
+            onSelect={setSelectedInterview}
+          />
+        ))}
 
-      {selectedInterview && (
+      {selectedInterview && !difficulty && (
+        <>
+        <h1>Select Difficulty Level :</h1><br />
+      
+          <label>Easy</label>
+          <input
+            type="radio"
+            name="difficulty"
+            value="easy"
+            onChange={(e) => setDifficulty(e.target.value)}
+          /><br /><br />
+
+          <label>Medium</label>
+          <input
+            type="radio"
+            name="difficulty"
+            value="medium"
+            onChange={(e) => setDifficulty(e.target.value)}
+          /><br /><br />
+
+          <label>Hard</label>
+          <input
+            type="radio"
+            name="difficulty"
+            value="hard"
+            onChange={(e) => setDifficulty(e.target.value)}
+          />
+        </>
+      )}
+
+      {selectedInterview && difficulty && !interviewCompleted && (
+        <h2>{selectedInterview}</h2>
+      )}
+
+      {selectedInterview && difficulty && (
         <div>
           {!interviewCompleted && (
             <>

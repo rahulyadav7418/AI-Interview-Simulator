@@ -1,4 +1,4 @@
-function InterviewCard({ interview, onSelect}) {
+function InterviewCard({ interview, onSelect, difficulty}) {
     return (
         <div className="card-container">
         <div className="card">

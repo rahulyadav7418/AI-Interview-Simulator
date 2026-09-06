@@ -113,11 +113,11 @@ button:hover {
 }
 
 /* Navbar */
-.nav-content {
+/* .nav-content {
   width: 100%;
   background-color: #fdfdfd;
   position: fixed;
-}
+} */
 .navbar-links {
   width: 100%;
   display: flex;
