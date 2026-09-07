@@ -179,17 +179,14 @@ function App() {
             setAnswer("");
             setSubmitted(false);
             setScore(0);
-
-          } else if(selectedInterview) {
+          } else if (selectedInterview) {
             setSelectedInterview("");
             setCurrentQuestion(0);
             setAnswer("");
             setSubmitted(false);
             setScore(0);
-
           } else if (interviewMode) {
             setInterviewMode("");
-
           } else {
             setStarted(false);
             setName("");
@@ -221,40 +218,31 @@ function App() {
               <h3>Resume Based Interview</h3>
 
               <p>
-                Interview questions based on your resume, skills and projects.
+                Upload your resume, skills and projects. Get personalized
+                interview questions.
               </p>
 
-              <button>Start →</button>
+              <button>→</button>
             </div>
 
             <div
               className="mode-card"
               onClick={() => setInterviewMode("skills")}
             >
-              <div className="mode-icon">💻</div>
+              <div className="mode-icon">{"</>"}</div>
 
               <h3>Skills Based Interview</h3>
 
               <p>
-                Practice interview questions based on a specific technical
-                skill.
+                Choose a specific skill (e.g. JavaScript, React, etc.) and start
+                practicing.
               </p>
 
-              <button>Start →</button>
+              <button>→</button>
             </div>
           </div>
         </div>
       )}
-
-      {started && interviewMode === "skills" &&
-      !selectedInterview &&
-      interviews.map((item, index) => (
-        <InterviewCard
-        key={index}
-        interview={item}
-        onSelect={setSelectedInterview}
-        />
-      ))}
 
       {started &&
         interviewMode === "skills" &&
@@ -269,15 +257,18 @@ function App() {
 
       {selectedInterview && !difficulty && (
         <>
-        <h1>Select Difficulty Level :</h1><br />
-      
+          <h1>Select Difficulty Level :</h1>
+          <br />
+
           <label>Easy</label>
           <input
             type="radio"
             name="difficulty"
             value="easy"
             onChange={(e) => setDifficulty(e.target.value)}
-          /><br /><br />
+          />
+          <br />
+          <br />
 
           <label>Medium</label>
           <input
@@ -285,7 +276,9 @@ function App() {
             name="difficulty"
             value="medium"
             onChange={(e) => setDifficulty(e.target.value)}
-          /><br /><br />
+          />
+          <br />
+          <br />
 
           <label>Hard</label>
           <input

@@ -128,74 +128,186 @@ button:hover {
   text-decoration: none;
 }
 
-/* Home Page */
-/* Interview Mode Selection */
+
+/* =========================
+   INTERVIEW MODE SECTION
+========================= */
 
 .mode-container {
   text-align: center;
-  padding: 40px 30px;
+  padding: 30px 20px 60px;
 }
 
-.mode-container h2 {
+/* Welcome Rahul */
+.welcome {
   font-size: 32px;
-  margin-bottom: 35px;
+  margin: 25px 0 45px;
+  color: #ffffff;
 }
 
+/* Main heading */
+.mode-container h2 {
+  font-size: 44px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 40px;
+}
+
+/* Cards container */
 .mode-options {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 30px;
-  max-width: 1000px;
+  gap: 25px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
+/* =========================
+   INTERVIEW CARDS
+========================= */
+
 .mode-card {
   width: 420px;
-  min-height: 300px;
+  min-height: 280px;
   padding: 30px;
-  border-radius: 18px;
-  text-align: center;
-  background: #ffffff;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 22px;
+  text-align: left;
+
+  color: white;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  background: linear-gradient(
+    135deg,
+    #17275c,
+    #202d70
+  );
+
+  border: 1px solid #3f6cff;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease;
 }
 
-.mode-card:hover {
-  /* transform: translateY(-6px); */
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+.mode-card:nth-child(2) {
+  background: linear-gradient(
+    135deg,
+    #30215f,
+    #35206c
+  );
+
+  border-color: #804cff;
 }
+
+/* Hover effect */
+.mode-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 45px rgba(70, 90, 255, 0.25);
+}
+
+/* =========================
+   ICON
+========================= */
 
 .mode-icon {
-  font-size: 50px;
-  margin-bottom: 15px;
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #5667ff,
+    #714cff
+  );
+
+  font-size: 32px;
+
+  margin-bottom: 22px;
 }
+
+/* =========================
+   CARD TITLE
+========================= */
 
 .mode-card h3 {
-  font-size: 24px;
-  margin-bottom: 15px;
+  font-size: 28px;
+  margin: 0 0 15px;
+  color: #ffffff;
 }
 
+/* Description */
 .mode-card p {
   font-size: 17px;
-  line-height: 1.5;
-  margin-bottom: 25px;
+  line-height: 1.6;
+  color: #d6dcf5;
+  margin: 0;
+  max-width: 330px;
 }
+
+/* =========================
+   ARROW BUTTON
+========================= */
 
 .mode-card button {
-  padding: 12px 28px;
+  float: right;
+
+  width: 55px;
+  height: 55px;
+
   border: none;
-  border-radius: 25px;
-  font-size: 16px;
+  border-radius: 50%;
+
+  background: #4d8cff;
+  color: white;
+
+  font-size: 28px;
+
   cursor: pointer;
+
+  margin-top: 15px;
+
+  transition: transform 0.2s ease;
 }
 
-/* Mobile */
+.mode-card:nth-child(2) button {
+  background: #9655ff;
+}
+
+.mode-card button:hover {
+  transform: scale(1.1);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width: 768px) {
+
+  .mode-container {
+    padding: 20px 15px 40px;
+  }
+
+  .welcome {
+    font-size: 25px;
+    margin: 20px 0 30px;
+  }
+
+  .mode-container h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+
   .mode-options {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 
   .mode-card {
@@ -205,5 +317,42 @@ button:hover {
 }
 
 .top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 3rem;
+  margin-bottom: 0;
+}
+
+.name-card {
+  width: 250px;
+  min-height: 120px;
+  padding: 30px;
+  border-radius: 30px;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: center;
+}
+
+.name-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .name-card {
+    width: 90%;
+    max-width: 420px;
+  }
+}
+
+.name-card, .name {
+  color: #1a1a2e;
+}
+
+.startInterview-btn {
+  background-color: blue;
 }
