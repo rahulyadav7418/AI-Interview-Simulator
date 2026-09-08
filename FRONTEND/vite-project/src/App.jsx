@@ -5,36 +5,86 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const interviews = [
-  "Frontend Interview",
-  "Backend Interview",
-  "AI Interview",
-  "Java Interview",
-];
+// const interviews = [
+//   "Frontend Interview",
+//   "Backend Interview",
+//   "AI Interview",
+//   "Java Interview",
+// ];
+
 const interviewQuestions = {
-  "Frontend Interview": [
-    "What is React?",
-    "What is JSX?",
-    "What is Virtual Dom?",
-  ],
+  "Frontend Interview": {
+    easy: [
+      "What is HTML and what is its purpose",
+      "What is React?",
+      "What is CSS used for?"
+    ],
+    medium: [
+      "What is the Virtual Dom in React?",
+      "What is the difference between state and props in React?",
+      "What are React hooks? Explain useState and useEffect?"
+    ],
+    hard: [
+      "How does React reconciliation work?",
+      "How would you optimize the performance of a React application?",
+      "What causes unnecessary re-renders in React, and how can you prevent them?"
+    ]
+  },
 
-  "Backend Interview": [
-    "What is Node.js?",
-    "What is Express.js?",
-    "What is API?",
-  ],
+  "Backend Interview": {
+    easy: [
+      "What is Node.js?",
+      "What is Express.js?",
+      "What is API?",
+    ],
+    medium: [
+      "What is REST API?",
+      "What is middleware in Express.js?",
+      "What is the difference between authentication and authorization?"
+    ],
+    hard: [
+      "How does the Node.js event loop work?",
+      "How would you design a scalable REST API?",
+      "How would you handle authentication securely in a production application?"
+    ]
 
-  "AI Interview": [
-    "What is AI?",
-    "What is Machine Learning?",
-    "What is Deep Learning?",
-  ],
+},
 
-  "Java Interview": [
+  "AI Interview": {
+    easy: [
+     "What is AI?",
+     "What is Machine Learning?",
+     "What is Deep Learning?",
+    ],
+    medium: [
+      "What is the difference between supervised and unsupervised learning?",
+      "What is overfitting, and how can you prevent it?",
+      "What is the difference between classification and regression?" 
+    ],
+    hard: [
+      "Explain the bias-variance tradeoff.",
+      "How would you evaluate wheather a machine learning model is performing well?",
+      "What is the difference between fine-tuning and prompt enginnering in Generetive AI?"
+    ]
+  },
+
+  "Java Interview": {
+    easy: [
     "What is OOP?",
     "What is Inheritence?",
     "What is Polimorphism?",
-  ],
+    ],
+    medium: [
+      "What is the difference between an interfece and an abstract class?",
+      "What is method Overloading vs method overriding?",
+      "What is the differece between ArrayList and LinkedList?"
+    ],
+    hard: [
+      "Explain how HashMap works internally in java",
+      "What is the difference between == and .equals() in java?",
+      "What is multithreading, and how does synchronization work in Java?"
+    ]
+  },
 
   // "AI/ML": [
   //   "What is AI?",
@@ -84,12 +134,12 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
-  const percentage = selectedInterview
-    ? (score / (interviewQuestions[selectedInterview].length * 2)) * 100
+  const percentage = selectedInterview && difficulty 
+    ? (score / (interviewQuestions[selectedInterview][difficulty].length * 2)) * 100
     : 0;
 
   const handleNextQuestion = () => {
-    if (currentQuestion < interviewQuestions[selectedInterview].length - 1) {
+    if (currentQuestion < interviewQuestions[selectedInterview][difficulty].length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setAnswer("");
       setSubmitted(false);
@@ -116,7 +166,7 @@ function App() {
     setAnswers((prev) => [
       ...prev,
       {
-        question: interviewQuestions[selectedInterview][currentQuestion],
+        question: interviewQuestions[selectedInterview][difficulty][currentQuestion],
         answer: answer,
       },
     ]);
@@ -125,7 +175,7 @@ function App() {
     setTimeout(() => {
       setCurrentQuestion((prev) => {
         const next = prev + 1;
-        if (next >= interviewQuestions[selectedInterview].length) {
+        if (next >= interviewQuestions[selectedInterview][difficulty].length) {
           setSubmitted(true); //or show final screen
           return prev; //stop increasing
         }
@@ -163,8 +213,8 @@ function App() {
   };
 
   const interviewCompleted =
-    selectedInterview &&
-    currentQuestion === interviewQuestions[selectedInterview].length - 1 &&
+    selectedInterview && difficulty &&
+    currentQuestion === interviewQuestions[selectedInterview][difficulty].length - 1 &&
     submitted;
 
   return (
@@ -300,17 +350,17 @@ function App() {
             <>
               <h3>
                 Question: {currentQuestion + 1} /{" "}
-                {interviewQuestions[selectedInterview].length}
+                {interviewQuestions[selectedInterview][difficulty].length}
               </h3>
 
-              <p>{interviewQuestions[selectedInterview][currentQuestion]}</p>
+              <p>{interviewQuestions[selectedInterview][difficulty][currentQuestion]}</p>
               <br />
             </>
           )}
 
           {!(
             currentQuestion ===
-              interviewQuestions[selectedInterview].length - 1 && submitted
+              interviewQuestions[selectedInterview][difficulty].length - 1 && submitted
           ) && (
             <>
               <input
@@ -344,7 +394,7 @@ function App() {
           </div>
 
           {currentQuestion ===
-            interviewQuestions[selectedInterview].length - 1 &&
+            interviewQuestions[selectedInterview][difficulty].length - 1 &&
             submitted && (
               <>
                 <div className="result-box">
@@ -352,13 +402,14 @@ function App() {
                   <br />
                   <h3>Name: {name} </h3>
                   <p>Interview: {selectedInterview}</p>
+                  <p>Difficulty Level: {difficulty}</p>
                   <br />
                   <hr />
                   {/* <h2>Results:</h2> */}
                   <br />
                   <p>
                     Total Questions:{" "}
-                    {interviewQuestions[selectedInterview].length}
+                    {interviewQuestions[selectedInterview][difficulty].length}
                   </p>
                   <p>Score: {score}</p>
                   <p> Percentage: {percentage.toFixed(0)}% </p>
