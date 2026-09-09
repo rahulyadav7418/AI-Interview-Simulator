@@ -93,7 +93,15 @@ const interviewQuestions = {
   // ],
 };
 
+function
+shuffleQuestion(interviewQuestions) {
+  return [...interviewQuestions].sort(() =>
+  Math.random() - 0.5);
+}
+
 function App() {
+  const [questionList, setQuestionList] = useState([]);
+
   const [started, setStarted] = useState(false);
   const [interviewMode, setInterviewMode] = useState("");
 
@@ -139,7 +147,7 @@ function App() {
     : 0;
 
   const handleNextQuestion = () => {
-    if (currentQuestion < interviewQuestions[selectedInterview][difficulty].length - 1) {
+    if (currentQuestion < questionList.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setAnswer("");
       setSubmitted(false);
@@ -166,7 +174,7 @@ function App() {
     setAnswers((prev) => [
       ...prev,
       {
-        question: interviewQuestions[selectedInterview][difficulty][currentQuestion],
+        question: questionList[currentQuestion],
         answer: answer,
       },
     ]);
@@ -175,7 +183,7 @@ function App() {
     setTimeout(() => {
       setCurrentQuestion((prev) => {
         const next = prev + 1;
-        if (next >= interviewQuestions[selectedInterview][difficulty].length) {
+        if (next >= questionList.length) {
           setSubmitted(true); //or show final screen
           return prev; //stop increasing
         }
@@ -214,13 +222,13 @@ function App() {
 
   const interviewCompleted =
     selectedInterview && difficulty &&
-    currentQuestion === interviewQuestions[selectedInterview][difficulty].length - 1 &&
+    currentQuestion === questionList.length - 1 &&
     submitted;
 
   return (
     <div>
       <Navbar
-        showBack={started || selectedInterview || interviewMode}
+        showBack={started || selectedInterview || interviewMode || questionList}
         onBack={() => {
           if (selectedInterview && difficulty) {
             setDifficulty("");
@@ -315,7 +323,14 @@ function App() {
             type="radio"
             name="difficulty"
             value="easy"
-            onChange={(e) => setDifficulty(e.target.value)}
+            onChange={(e) => {
+              const selectedDifficulty = e.target.value;
+              
+              setDifficulty(selectedDifficulty);
+              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              setQuestionList(shuffleQuestion(questions));
+              setCurrentQuestion(0);
+            }}
           />
           <br />
           <br />
@@ -325,7 +340,14 @@ function App() {
             type="radio"
             name="difficulty"
             value="medium"
-            onChange={(e) => setDifficulty(e.target.value)}
+            onChange={(e) => {
+              const selectedDifficulty = e.target.value;
+              
+              setDifficulty(selectedDifficulty);
+              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              setQuestionList(shuffleQuestion(questions));
+              setCurrentQuestion(0);
+            }}
           />
           <br />
           <br />
@@ -335,7 +357,14 @@ function App() {
             type="radio"
             name="difficulty"
             value="hard"
-            onChange={(e) => setDifficulty(e.target.value)}
+            onChange={(e) => {
+              const selectedDifficulty = e.target.value;
+              
+              setDifficulty(selectedDifficulty);
+              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              setQuestionList(shuffleQuestion(questions));
+              setCurrentQuestion(0);
+            }}
           />
         </>
       )}
@@ -350,10 +379,10 @@ function App() {
             <>
               <h3>
                 Question: {currentQuestion + 1} /{" "}
-                {interviewQuestions[selectedInterview][difficulty].length}
+                {questionList.length}
               </h3>
 
-              <p>{interviewQuestions[selectedInterview][difficulty][currentQuestion]}</p>
+              <p>{questionList[currentQuestion]}</p>
               <br />
             </>
           )}
@@ -394,7 +423,7 @@ function App() {
           </div>
 
           {currentQuestion ===
-            interviewQuestions[selectedInterview][difficulty].length - 1 &&
+            questionList.length - 1 &&
             submitted && (
               <>
                 <div className="result-box">
