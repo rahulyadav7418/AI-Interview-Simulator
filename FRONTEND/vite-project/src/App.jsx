@@ -17,89 +17,74 @@ const interviewQuestions = {
     Easy: [
       "What is HTML and what is its purpose",
       "What is React?",
-      "What is CSS used for?"
+      "What is CSS used for?",
     ],
     Medium: [
       "What is the Virtual Dom in React?",
       "What is the difference between state and props in React?",
-      "What are React hooks? Explain useState and useEffect?"
+      "What are React hooks? Explain useState and useEffect?",
     ],
     Hard: [
       "How does React reconciliation work?",
       "How would you optimize the performance of a React application?",
-      "What causes unnecessary re-renders in React, and how can you prevent them?"
-    ]
+      "What causes unnecessary re-renders in React, and how can you prevent them?",
+    ],
   },
 
   "Backend Interview": {
-    Easy: [
-      "What is Node.js?",
-      "What is Express.js?",
-      "What is API?",
-    ],
+    Easy: ["What is Node.js?", "What is Express.js?", "What is API?"],
     Medium: [
       "What is REST API?",
       "What is middleware in Express.js?",
-      "What is the difference between authentication and authorization?"
+      "What is the difference between authentication and authorization?",
     ],
     Hard: [
       "How does the Node.js event loop work?",
       "How would you design a scalable REST API?",
-      "How would you handle authentication securely in a production application?"
-    ]
-
-},
+      "How would you handle authentication securely in a production application?",
+    ],
+  },
 
   "AI Interview": {
     Easy: [
-     "What is AI?",
-     "What is Machine Learning?",
-     "What is Deep Learning?",
+      "What is AI?",
+      "What is Machine Learning?",
+      "What is Deep Learning?",
     ],
     Medium: [
       "What is the difference between supervised and unsupervised learning?",
       "What is overfitting, and how can you prevent it?",
-      "What is the difference between classification and regression?" 
+      "What is the difference between classification and regression?",
     ],
     Hard: [
       "Explain the bias-variance tradeoff.",
       "How would you evaluate wheather a machine learning model is performing well?",
-      "What is the difference between fine-tuning and prompt enginnering in Generetive AI?"
-    ]
+      "What is the difference between fine-tuning and prompt enginnering in Generetive AI?",
+    ],
   },
 
   "Java Interview": {
-    Easy: [
-    "What is OOP?",
-    "What is Inheritence?",
-    "What is Polimorphism?",
-    ],
+    Easy: ["What is OOP?", "What is Inheritence?", "What is Polimorphism?"],
     Medium: [
       "What is the difference between an interfece and an abstract class?",
       "What is method Overloading vs method overriding?",
-      "What is the differece between ArrayList and LinkedList?"
+      "What is the differece between ArrayList and LinkedList?",
     ],
     Hard: [
       "Explain how HashMap works internally in java",
       "What is the difference between == and .equals() in java?",
-      "What is multithreading, and how does synchronization work in Java?"
-    ]
+      "What is multithreading, and how does synchronization work in Java?",
+    ],
   },
-
-  // "AI/ML": [
-  //   "What is AI?",
-  //   "What is Machine Learning?",
-  //   "What is Deep Learning?"
-  // ],
 };
 
-function
-shuffleQuestion(interviewQuestions) {
-  return [...interviewQuestions].sort(() =>
-  Math.random() - 0.5);
+function shuffleQuestion(interviewQuestions) {
+  return [...interviewQuestions].sort(() => Math.random() - 0.5);
 }
 
 function App() {
+  const [finalSubmitted, setFinalSubmitted] = useState(false);
+
   const [questionList, setQuestionList] = useState([]);
 
   const [started, setStarted] = useState(false);
@@ -142,9 +127,12 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
-  const percentage = selectedInterview && difficulty 
-    ? (score / (interviewQuestions[selectedInterview][difficulty].length * 2)) * 100
-    : 0;
+  const percentage =
+    selectedInterview && difficulty
+      ? (score /
+          (interviewQuestions[selectedInterview][difficulty].length * 2)) *
+        100
+      : 0;
 
   const handleNextQuestion = () => {
     if (currentQuestion < questionList.length - 1) {
@@ -196,6 +184,23 @@ function App() {
   };
 
   const handleStartNew = () => {
+    setName("");
+    setStarted(false);
+    setSelectedInterview("");
+    setCurrentQuestion(0);
+    setAnswer("");
+    setSubmitted(false);
+    setScore(0);
+    setFinalSubmitted(false);
+
+    setAnswers([]);
+    setDifficulty("");
+    setQuestionList([]);
+  };
+
+  const finalSubmition = () => {
+    if (finalSubmitted) return;
+
     axios
       .post("http://localhost:8080/interviews", {
         name,
@@ -206,32 +211,26 @@ function App() {
         percentage: percentage.toFixed(0),
       })
       .then(() => {
-        console.log("Saved Succefully");
+        console.log("Saved Successfully");
+        setFinalSubmitted(true);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    setName("");
-    setStarted(false);
-    setSelectedInterview("");
-    setCurrentQuestion(0);
-    setAnswer("");
-    setSubmitted(false);
-    setScore(0);
-
-    answers([]);
-    difficulty("");
-    questionList([]);
-    score(0);
-
-
   };
 
   const interviewCompleted =
-    selectedInterview && difficulty &&
+    selectedInterview &&
+    difficulty &&
     currentQuestion === questionList.length - 1 &&
     submitted;
+
+  console.log({
+    started,
+    interviewMode,
+    selectedInterview,
+    difficulty,
+  }); //it is checking that rare case
 
   return (
     <div>
@@ -333,9 +332,10 @@ function App() {
             value="Easy"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
-              
+
               setDifficulty(selectedDifficulty);
-              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              const questions =
+                interviewQuestions[selectedInterview][selectedDifficulty];
               setQuestionList(shuffleQuestion(questions));
               setCurrentQuestion(0);
             }}
@@ -350,9 +350,10 @@ function App() {
             value="Medium"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
-              
+
               setDifficulty(selectedDifficulty);
-              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              const questions =
+                interviewQuestions[selectedInterview][selectedDifficulty];
               setQuestionList(shuffleQuestion(questions));
               setCurrentQuestion(0);
             }}
@@ -367,9 +368,10 @@ function App() {
             value="Hard"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
-              
+
               setDifficulty(selectedDifficulty);
-              const questions = interviewQuestions[selectedInterview][selectedDifficulty];
+              const questions =
+                interviewQuestions[selectedInterview][selectedDifficulty];
               setQuestionList(shuffleQuestion(questions));
               setCurrentQuestion(0);
             }}
@@ -386,8 +388,7 @@ function App() {
           {!interviewCompleted && (
             <>
               <h3>
-                Question: {currentQuestion + 1} /{" "}
-                {questionList.length}
+                Question: {currentQuestion + 1} / {questionList.length}
               </h3>
 
               <p>{questionList[currentQuestion]}</p>
@@ -397,7 +398,8 @@ function App() {
 
           {!(
             currentQuestion ===
-              interviewQuestions[selectedInterview][difficulty].length - 1 && submitted
+              interviewQuestions[selectedInterview][difficulty].length - 1 &&
+            submitted
           ) && (
             <>
               <input
@@ -430,39 +432,59 @@ function App() {
             )}
           </div>
 
-          {currentQuestion ===
-            questionList.length - 1 &&
-            submitted && (
-              <>
-                <div className="result-box">
-                  <h2>🎉 Interview Completed!</h2>
-                  <br />
-                  <h3>Name: {name} </h3>
-                  <p>Interview: {selectedInterview}</p>
-                  <p>Difficulty Level: {difficulty}</p>
-                  <br />
-                  <hr />
-                  {/* <h2>Results:</h2> */}
-                  <br />
-                  <p>
-                    Total Questions:{" "}
-                    {interviewQuestions[selectedInterview][difficulty].length}
-                  </p>
-                  <p>Score: {score}</p>
-                  <p> Percentage: {percentage.toFixed(0)}% </p>
-                  <br />
-                  <p>
-                    {percentage >= 80
-                      ? "Excellent Performance 🚀"
-                      : percentage >= 60
-                        ? "Good Performance 👍"
-                        : "Keep Practicing 💪"}
-                  </p>
-                  <br />
-                  <button onClick={handleStartNew}> Start New </button>
-                </div>
-              </>
-            )}
+          {currentQuestion === questionList.length - 1 && submitted && (
+            <>
+              <div className="result-box">
+                <h2>🎉 Interview Completed!</h2>
+                <br />
+                <h3>Name: {name} </h3>
+                <p>Interview: {selectedInterview}</p>
+                <p>Difficulty Level: {difficulty}</p>
+                <br />
+                <hr />
+                {/* <h2>Results:</h2> */}
+                <br />
+                <p>
+                  Total Questions:{" "}
+                  {interviewQuestions[selectedInterview][difficulty].length}
+                </p>
+                <p>Score: {score}</p>
+                <p> Percentage: {percentage.toFixed(0)}% </p>
+                <br />
+                <p>
+                  {percentage >= 80
+                    ? "Excellent Performance 🚀"
+                    : percentage >= 60
+                      ? "Good Performance 👍"
+                      : "Keep Practicing 💪"}
+                </p>
+                <br />
+
+                <button
+                  onClick={handleStartNew}
+                  style={{ backgroundColor: "yellow", color: "black" }}
+                >
+                  {" "}
+                  Start New{" "}
+                </button>
+                <button
+                  onClick={finalSubmition}
+                  disabled={finalSubmitted}
+                  style={{
+                    backgroundColor: "green",
+                    color: "black",
+                    opacity: finalSubmitted ? 0.5 : 1,
+                  }}
+                >
+                  {finalSubmitted ? "Submitted ✓" : "Submit"}
+                </button>
+
+                {finalSubmitted && (
+                  <p>Your current performance has been saved successfully ✅</p>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
