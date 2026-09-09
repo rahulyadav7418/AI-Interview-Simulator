@@ -14,17 +14,17 @@ import axios from "axios";
 
 const interviewQuestions = {
   "Frontend Interview": {
-    easy: [
+    Easy: [
       "What is HTML and what is its purpose",
       "What is React?",
       "What is CSS used for?"
     ],
-    medium: [
+    Medium: [
       "What is the Virtual Dom in React?",
       "What is the difference between state and props in React?",
       "What are React hooks? Explain useState and useEffect?"
     ],
-    hard: [
+    Hard: [
       "How does React reconciliation work?",
       "How would you optimize the performance of a React application?",
       "What causes unnecessary re-renders in React, and how can you prevent them?"
@@ -32,17 +32,17 @@ const interviewQuestions = {
   },
 
   "Backend Interview": {
-    easy: [
+    Easy: [
       "What is Node.js?",
       "What is Express.js?",
       "What is API?",
     ],
-    medium: [
+    Medium: [
       "What is REST API?",
       "What is middleware in Express.js?",
       "What is the difference between authentication and authorization?"
     ],
-    hard: [
+    Hard: [
       "How does the Node.js event loop work?",
       "How would you design a scalable REST API?",
       "How would you handle authentication securely in a production application?"
@@ -51,17 +51,17 @@ const interviewQuestions = {
 },
 
   "AI Interview": {
-    easy: [
+    Easy: [
      "What is AI?",
      "What is Machine Learning?",
      "What is Deep Learning?",
     ],
-    medium: [
+    Medium: [
       "What is the difference between supervised and unsupervised learning?",
       "What is overfitting, and how can you prevent it?",
       "What is the difference between classification and regression?" 
     ],
-    hard: [
+    Hard: [
       "Explain the bias-variance tradeoff.",
       "How would you evaluate wheather a machine learning model is performing well?",
       "What is the difference between fine-tuning and prompt enginnering in Generetive AI?"
@@ -69,17 +69,17 @@ const interviewQuestions = {
   },
 
   "Java Interview": {
-    easy: [
+    Easy: [
     "What is OOP?",
     "What is Inheritence?",
     "What is Polimorphism?",
     ],
-    medium: [
+    Medium: [
       "What is the difference between an interfece and an abstract class?",
       "What is method Overloading vs method overriding?",
       "What is the differece between ArrayList and LinkedList?"
     ],
-    hard: [
+    Hard: [
       "Explain how HashMap works internally in java",
       "What is the difference between == and .equals() in java?",
       "What is multithreading, and how does synchronization work in Java?"
@@ -200,6 +200,7 @@ function App() {
       .post("http://localhost:8080/interviews", {
         name,
         interviewType: selectedInterview,
+        difficulty: difficulty,
         answers: answers,
         score: score,
         percentage: percentage.toFixed(0),
@@ -218,6 +219,13 @@ function App() {
     setAnswer("");
     setSubmitted(false);
     setScore(0);
+
+    answers([]);
+    difficulty("");
+    questionList([]);
+    score(0);
+
+
   };
 
   const interviewCompleted =
@@ -322,7 +330,7 @@ function App() {
           <input
             type="radio"
             name="difficulty"
-            value="easy"
+            value="Easy"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
               
@@ -339,7 +347,7 @@ function App() {
           <input
             type="radio"
             name="difficulty"
-            value="medium"
+            value="Medium"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
               
@@ -356,7 +364,7 @@ function App() {
           <input
             type="radio"
             name="difficulty"
-            value="hard"
+            value="Hard"
             onChange={(e) => {
               const selectedDifficulty = e.target.value;
               

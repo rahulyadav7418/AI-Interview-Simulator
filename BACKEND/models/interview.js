@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const interviewSchema = new mongoose.Schema({
     name: String,
     interviewType: String,
+    difficulty: String,
     answers: [
       {
         question: String,
