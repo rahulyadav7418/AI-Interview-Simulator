@@ -1,9 +1,13 @@
+require("dotenv").config();
+Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Interview = require("./models/interview.js");
 const cors = require("cors");
-const ollama = require("ollama").default;
+// const ollama = require("ollama").default;
+const axios = require("axios");
 
 app.use(cors());
 app.use(express.json());
@@ -36,36 +40,46 @@ app.post("/interviews", async (req, res) => {
 //AI Evaluation/ by using Ollama
 app.post("/evaluate", async (req, res) => {
   const { question, answer } = req.body;
-  // const response = await client.responses.create({
-  //   model: "gpt-5",
-  //   input: `Evaluate this interview answer.
 
-  //   Question: ${question}
-
-  //   Answer: ${answer}
-
-  //   Give a score out of 10 and brief feedback.`
-  // });
-  // console.log(response);
-
-  const response = await ollama.chat({
-    model: "qwen3:0.6b",
-    think: false,
-    messages: [
+  try {
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
       {
-        role: "user",
-        content: `Evaluate this interview answer.
+        model: "nex-agi/nex-n2.5-pro:free",
+        messages: [
+          {
+            role: "user",
+            content: `Evaluate this interview answer.
 
 Question: ${question}
 
 Answer: ${answer}
 
 Give a score out of 10 and brief feedback.`,
+          },
+        ],
       },
-    ],
-  });
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
-  console.log(response.message.content);
+    const evaluation = response.data.choices[0].message.content;
+
+    console.log(evaluation);
+
+    res.json({
+      evaluation: evaluation,
+    });
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+    res.status(500).json({
+      error: "AI evaluation failed",
+    });
+  }
 });
 
 //destroy

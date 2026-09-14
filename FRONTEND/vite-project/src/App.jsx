@@ -83,6 +83,8 @@ function shuffleQuestion(interviewQuestions) {
 }
 
 function App() {
+  const [evaluation, setEvaluation] = useState("");
+
   const [finalSubmitted, setFinalSubmitted] = useState(false);
 
   const [questionList, setQuestionList] = useState([]);
@@ -146,7 +148,7 @@ function App() {
   };
   //console.log(selectedInterview);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // console.log("Submit clicked");
     // console.log("Current Question:", currentQuestion);
 
@@ -156,6 +158,35 @@ function App() {
       alert("Please enter an answer!");
       return;
     }
+
+    const currentAnswer = answer;
+    const currentQuestionText = questionList[currentQuestion];
+
+    try {
+      const res = await axios.post("http://localhost:8080/evaluate", {
+        question: currentQuestionText,
+        answer: currentAnswer,
+      });
+
+      console.log("AI Evaluation:", res.data.evaluation);
+      setEvaluation(res.data.evaluation);
+    } catch (err) {
+      console.log("AI Evaluation Error:", err);
+    }
+
+    setCurrentQuestion((prev) => {
+      const next = prev + 1;
+
+      if (next >= questionList.length) {
+        return prev;
+      }
+
+      return next;
+    });
+
+    setAnswer("");
+    setSubmitted(false);
+
     setSubmitted(true);
     setScore((prev) => prev + 2);
 
@@ -168,19 +199,19 @@ function App() {
     ]);
     setAnswer("");
 
-    setTimeout(() => {
-      setCurrentQuestion((prev) => {
-        const next = prev + 1;
-        if (next >= questionList.length) {
-          setSubmitted(true); //or show final screen
-          return prev; //stop increasing
-        }
-        return next;
-      });
+    // setTimeout(() => {
+    //   setCurrentQuestion((prev) => {
+    //     const next = prev + 1;
+    //     if (next >= questionList.length) {
+    //       setSubmitted(true); //or show final screen
+    //       return prev; //stop increasing
+    //     }
+    //     return next;
+    //   });
 
-      setAnswer("");
-      setSubmitted(false);
-    }, 800);
+    //   setAnswer("");
+    //   setSubmitted(false);
+    // }, 800);
   };
 
   const handleStartNew = () => {
@@ -421,9 +452,17 @@ function App() {
           )}
 
           {!interviewCompleted && (
-            <button className="next" onClick={handleNextQuestion}>
-              Skip
-            </button>
+            <>
+              <button className="next" onClick={handleNextQuestion}>
+                Skip
+              </button>
+              {evaluation && (
+                <div>
+                  <h3>AI Evaluation</h3>
+                  <p>{evaluation}</p>
+                </div>
+              )}
+            </>
           )}
 
           <div className="message-box">
