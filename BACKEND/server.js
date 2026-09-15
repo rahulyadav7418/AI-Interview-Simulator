@@ -1,5 +1,5 @@
 require("dotenv").config();
-Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`;
 
 const express = require("express");
 const app = express();
@@ -51,11 +51,17 @@ app.post("/evaluate", async (req, res) => {
             role: "user",
             content: `Evaluate this interview answer.
 
-Question: ${question}
+            Question: ${question}
 
-Answer: ${answer}
+            Answer: ${answer}
 
-Give a score out of 10 and brief feedback.`,
+            Give a score from 0 to 10.
+
+            Return ONLY valid JSON:
+            {
+                "score": 0,
+                "feedback": "brief feedback"
+            }`,
           },
         ],
       },

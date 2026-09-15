@@ -84,6 +84,7 @@ function shuffleQuestion(interviewQuestions) {
 
 function App() {
   const [evaluation, setEvaluation] = useState("");
+  const [evaluating, setEvaluating] = useState(false);
 
   const [finalSubmitted, setFinalSubmitted] = useState(false);
 
@@ -132,7 +133,7 @@ function App() {
   const percentage =
     selectedInterview && difficulty
       ? (score /
-          (interviewQuestions[selectedInterview][difficulty].length * 2)) *
+          (interviewQuestions[selectedInterview][difficulty].length * 10)) *
         100
       : 0;
 
@@ -141,12 +142,9 @@ function App() {
       setCurrentQuestion((prev) => prev + 1);
       setAnswer("");
       setSubmitted(false);
-    } else {
-      // Last question skipped
-      setSubmitted(true);
+      setEvaluation("");
     }
   };
-  //console.log(selectedInterview);
 
   const handleSubmit = async () => {
     // console.log("Submit clicked");
@@ -159,6 +157,8 @@ function App() {
       return;
     }
 
+    setEvaluating(true);
+
     const currentAnswer = answer;
     const currentQuestionText = questionList[currentQuestion];
 
@@ -169,26 +169,19 @@ function App() {
       });
 
       console.log("AI Evaluation:", res.data.evaluation);
-      setEvaluation(res.data.evaluation);
+
+      const evaluationData = JSON.parse(res.data.evaluation);
+
+      setEvaluation(evaluationData);
+      setScore((prev) => prev + evaluationData.score);
+      setEvaluating(false);
     } catch (err) {
       console.log("AI Evaluation Error:", err);
+      setEvaluating(false);
     }
 
-    setCurrentQuestion((prev) => {
-      const next = prev + 1;
-
-      if (next >= questionList.length) {
-        return prev;
-      }
-
-      return next;
-    });
-
-    setAnswer("");
-    setSubmitted(false);
-
     setSubmitted(true);
-    setScore((prev) => prev + 2);
+    // setScore((prev) => prev + 2);
 
     setAnswers((prev) => [
       ...prev,
@@ -256,12 +249,12 @@ function App() {
     currentQuestion === questionList.length - 1 &&
     submitted;
 
-  console.log({
-    started,
-    interviewMode,
-    selectedInterview,
-    difficulty,
-  }); //it is checking that rare case
+  // console.log({
+  //   started,
+  //   interviewMode,
+  //   selectedInterview,
+  //   difficulty,
+  // }); //it is checking that rare case
 
   return (
     <div>
@@ -444,32 +437,32 @@ function App() {
               <button
                 className="submit"
                 onClick={handleSubmit}
-                disabled={submitted}
+                disabled={submitted || evaluating}
               >
-                Submit
+                {evaluating ? "Evaluating..." : "Submit"}
               </button>
             </>
           )}
 
           {!interviewCompleted && (
-            <>
-              <button className="next" onClick={handleNextQuestion}>
-                Skip
-              </button>
-              {evaluation && (
-                <div>
-                  <h3>AI Evaluation</h3>
-                  <p>{evaluation}</p>
-                </div>
-              )}
-            </>
+            <button className="next" onClick={handleNextQuestion}>
+              {submitted ? "Next Question →" : "Skip"}
+            </button>
           )}
 
-          <div className="message-box">
-            {submitted && !interviewCompleted && (
-              <p>Answer Submitted Successfully!</p>
-            )}
-          </div>
+          {evaluation && (
+            <div className="evaluation-box">
+              <h3>🤖 AI Evaluation</h3>
+
+              <p>
+                <strong>Score:</strong> {evaluation.score}/10
+              </p>
+
+              <p>
+                <strong>Feedback:</strong> {evaluation.feedback}
+              </p>
+            </div>
+          )}
 
           {currentQuestion === questionList.length - 1 && submitted && (
             <>
@@ -487,7 +480,7 @@ function App() {
                   Total Questions:{" "}
                   {interviewQuestions[selectedInterview][difficulty].length}
                 </p>
-                <p>Score: {score}</p>
+                <p>Score: {score} / {questionList.length * 10}</p>
                 <p> Percentage: {percentage.toFixed(0)}% </p>
                 <br />
                 <p>
