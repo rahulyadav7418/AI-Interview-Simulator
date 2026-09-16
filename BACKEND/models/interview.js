@@ -1,17 +1,19 @@
 const mongoose = require("mongoose");
 
 const interviewSchema = new mongoose.Schema({
-    name: String,
-    interviewType: String,
-    difficulty: String,
-    answers: [
-      {
-        question: String,
-        answer: String
-      }
-    ],
-    score: Number,
-    percentage: Number
+  name: String,
+  interviewType: String,
+  difficulty: String,
+  answers: [
+    {
+      question: String,
+      answer: String,
+      score: Number,
+      feedback: String,
+    },
+  ],
+  score: Number,
+  percentage: Number,
 });
 
 const Interview = mongoose.model("Interview", interviewSchema);
@@ -35,6 +37,5 @@ const Interview = mongoose.model("Interview", interviewSchema);
 // }).catch((err) => {
 //     console.log(err);
 // });
-
 
 module.exports = Interview;

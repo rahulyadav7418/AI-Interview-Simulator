@@ -85,6 +85,8 @@ function shuffleQuestion(interviewQuestions) {
 function App() {
   const [evaluation, setEvaluation] = useState("");
   const [evaluating, setEvaluating] = useState(false);
+  const [interviewFinished, setInterviewFinished] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
   const [finalSubmitted, setFinalSubmitted] = useState(false);
 
@@ -147,9 +149,6 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    // console.log("Submit clicked");
-    // console.log("Current Question:", currentQuestion);
-
     if (submitted) return;
 
     if (answer.trim() === "") {
@@ -163,49 +162,40 @@ function App() {
     const currentQuestionText = questionList[currentQuestion];
 
     try {
-      const res = await axios.post("http://localhost:8080/evaluate", {
-        question: currentQuestionText,
-        answer: currentAnswer,
-      });
+  const res = await axios.post("http://localhost:8080/evaluate", {
+    question: currentQuestionText,
+    answer: currentAnswer,
+  });
 
-      console.log("AI Evaluation:", res.data.evaluation);
+  console.log("AI Evaluation:", res.data.evaluation);
 
-      const evaluationData = JSON.parse(res.data.evaluation);
+  const evaluationData = JSON.parse(res.data.evaluation);
 
-      setEvaluation(evaluationData);
-      setScore((prev) => prev + evaluationData.score);
-      setEvaluating(false);
-    } catch (err) {
-      console.log("AI Evaluation Error:", err);
-      setEvaluating(false);
-    }
+  setEvaluation(evaluationData);
+  setScore((prev) => prev + evaluationData.score);
 
-    setSubmitted(true);
-    // setScore((prev) => prev + 2);
+  setAnswers((prev) => [
+    ...prev,
+    {
+      question: currentQuestionText,
+      answer: currentAnswer,
+      score: evaluationData.score,
+      feedback: evaluationData.feedback,
+    },
+  ]);
 
-    setAnswers((prev) => [
-      ...prev,
-      {
-        question: questionList[currentQuestion],
-        answer: answer,
-      },
-    ]);
-    setAnswer("");
+  if (currentQuestion === questionList.length - 1) {
+    setInterviewFinished(true);
+  }
 
-    // setTimeout(() => {
-    //   setCurrentQuestion((prev) => {
-    //     const next = prev + 1;
-    //     if (next >= questionList.length) {
-    //       setSubmitted(true); //or show final screen
-    //       return prev; //stop increasing
-    //     }
-    //     return next;
-    //   });
+  setEvaluating(false);
+  setSubmitted(true);
+  setAnswer("");
 
-    //   setAnswer("");
-    //   setSubmitted(false);
-    // }, 800);
-  };
+} catch (err) {
+  console.log("AI Evaluation Error:", err);
+  setEvaluating(false);
+}
 
   const handleStartNew = () => {
     setName("");
@@ -220,6 +210,9 @@ function App() {
     setAnswers([]);
     setDifficulty("");
     setQuestionList([]);
+    setInterviewFinished(false);
+    setShowResult(false);
+    setEvaluation("");
   };
 
   const finalSubmition = () => {
@@ -247,7 +240,7 @@ function App() {
     selectedInterview &&
     difficulty &&
     currentQuestion === questionList.length - 1 &&
-    submitted;
+    interviewFinished;
 
   // console.log({
   //   started,
@@ -268,6 +261,9 @@ function App() {
             setAnswer("");
             setSubmitted(false);
             setScore(0);
+            setEvaluation("");
+            setInterviewFinished(false);
+            setShowResult(false);
           } else if (selectedInterview) {
             setSelectedInterview("");
             setCurrentQuestion(0);
@@ -403,13 +399,13 @@ function App() {
         </>
       )}
 
-      {selectedInterview && difficulty && !interviewCompleted && (
+      {selectedInterview && difficulty && !showResult && (
         <h2>{selectedInterview}</h2>
       )}
 
-      {selectedInterview && difficulty && (
+      {selectedInterview && difficulty && !showResult && (
         <div>
-          {!interviewCompleted && (
+          {!showResult && (
             <>
               <h3>
                 Question: {currentQuestion + 1} / {questionList.length}
@@ -445,12 +441,16 @@ function App() {
           )}
 
           {!interviewCompleted && (
-            <button className="next" onClick={handleNextQuestion}>
+            <button
+              className="next"
+              onClick={handleNextQuestion}
+              disabled={evaluating}
+            >
               {submitted ? "Next Question →" : "Skip"}
             </button>
           )}
 
-          {evaluation && (
+          {evaluation && !showResult && (
             <div className="evaluation-box">
               <h3>🤖 AI Evaluation</h3>
 
@@ -463,61 +463,69 @@ function App() {
               </p>
             </div>
           )}
-
-          {currentQuestion === questionList.length - 1 && submitted && (
-            <>
-              <div className="result-box">
-                <h2>🎉 Interview Completed!</h2>
-                <br />
-                <h3>Name: {name} </h3>
-                <p>Interview: {selectedInterview}</p>
-                <p>Difficulty Level: {difficulty}</p>
-                <br />
-                <hr />
-                {/* <h2>Results:</h2> */}
-                <br />
-                <p>
-                  Total Questions:{" "}
-                  {interviewQuestions[selectedInterview][difficulty].length}
-                </p>
-                <p>Score: {score} / {questionList.length * 10}</p>
-                <p> Percentage: {percentage.toFixed(0)}% </p>
-                <br />
-                <p>
-                  {percentage >= 80
-                    ? "Excellent Performance 🚀"
-                    : percentage >= 60
-                      ? "Good Performance 👍"
-                      : "Keep Practicing 💪"}
-                </p>
-                <br />
-
-                <button
-                  onClick={handleStartNew}
-                  style={{ backgroundColor: "yellow", color: "black" }}
-                >
-                  {" "}
-                  Start New{" "}
-                </button>
-                <button
-                  onClick={finalSubmition}
-                  disabled={finalSubmitted}
-                  style={{
-                    backgroundColor: "green",
-                    color: "black",
-                    opacity: finalSubmitted ? 0.5 : 1,
-                  }}
-                >
-                  {finalSubmitted ? "Submitted ✓" : "Submit"}
-                </button>
-
-                {finalSubmitted && (
-                  <p>Your current performance has been saved successfully ✅</p>
-                )}
-              </div>
-            </>
-          )}
         </div>
+      )}
+
+      {interviewFinished && !showResult && (
+        <button className="next" onClick={() => setShowResult(true)}>
+          Finish Interview →
+        </button>
+      )}
+
+      {showResult && (
+        <>
+          <div className="result-box">
+            <h2>🎉 Interview Completed!</h2>
+            <br />
+            <h3>Name: {name} </h3>
+            <p>Interview: {selectedInterview}</p>
+            <p>Difficulty Level: {difficulty}</p>
+            <br />
+            <hr />
+            {/* <h2>Results:</h2> */}
+            <br />
+            <p>
+              Total Questions:{" "}
+              {interviewQuestions[selectedInterview][difficulty].length}
+            </p>
+            <p>
+              Score: {score} / {questionList.length * 10}
+            </p>
+            <p> Percentage: {percentage.toFixed(0)}% </p>
+            <br />
+            <p>
+              {percentage >= 80
+                ? "Excellent Performance 🚀"
+                : percentage >= 60
+                  ? "Good Performance 👍"
+                  : "Keep Practicing 💪"}
+            </p>
+            <br />
+
+            <button
+              onClick={handleStartNew}
+              style={{ backgroundColor: "yellow", color: "black" }}
+            >
+              {" "}
+              Start New{" "}
+            </button>
+            <button
+              onClick={finalSubmition}
+              disabled={finalSubmitted}
+              style={{
+                backgroundColor: "green",
+                color: "black",
+                opacity: finalSubmitted ? 0.5 : 1,
+              }}
+            >
+              {finalSubmitted ? "Submitted ✓" : "Submit"}
+            </button>
+
+            {finalSubmitted && (
+              <p>Your current performance has been saved successfully ✅</p>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
