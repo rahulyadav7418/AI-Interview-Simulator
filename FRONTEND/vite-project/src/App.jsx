@@ -274,12 +274,12 @@ function App() {
             setInterviewMode("");
           } else {
             setStarted(false);
-            setName("");
+            // setName("");
           }
         }}
       />
 
-      <>
+      {!started && (
         <Hero
           name={name}
           setName={setName}
@@ -287,7 +287,7 @@ function App() {
           setStarted={setStarted}
           selectedInterview={selectedInterview}
         />
-      </>
+      )}
 
       {started && !interviewMode && (
         <div className="mode-container">
@@ -329,203 +329,371 @@ function App() {
         </div>
       )}
 
-      {started &&
-        interviewMode === "skills" &&
-        !selectedInterview &&
-        interviews.map((item, index) => (
-          <InterviewCard
-            key={index}
-            interview={item}
-            onSelect={setSelectedInterview}
-          />
-        ))}
-
-      {selectedInterview && !difficulty && (
+      {started && interviewMode === "skills" && !selectedInterview && (
         <>
-          <h1>Select Difficulty Level :</h1>
-          <br />
+          <div className="interview-selection-header">
+            <h2>What type of interview?</h2>
+            <p>Choose a skill and start practicing.</p>
+          </div>
 
-          <label>Easy</label>
-          <input
-            type="radio"
-            name="difficulty"
-            value="Easy"
-            onChange={(e) => {
-              const selectedDifficulty = e.target.value;
-
-              setDifficulty(selectedDifficulty);
-              const questions =
-                interviewQuestions[selectedInterview][selectedDifficulty];
-              setQuestionList(shuffleQuestion(questions));
-              setCurrentQuestion(0);
-            }}
-          />
-          <br />
-          <br />
-
-          <label>Medium</label>
-          <input
-            type="radio"
-            name="difficulty"
-            value="Medium"
-            onChange={(e) => {
-              const selectedDifficulty = e.target.value;
-
-              setDifficulty(selectedDifficulty);
-              const questions =
-                interviewQuestions[selectedInterview][selectedDifficulty];
-              setQuestionList(shuffleQuestion(questions));
-              setCurrentQuestion(0);
-            }}
-          />
-          <br />
-          <br />
-
-          <label>Hard</label>
-          <input
-            type="radio"
-            name="difficulty"
-            value="Hard"
-            onChange={(e) => {
-              const selectedDifficulty = e.target.value;
-
-              setDifficulty(selectedDifficulty);
-              const questions =
-                interviewQuestions[selectedInterview][selectedDifficulty];
-              setQuestionList(shuffleQuestion(questions));
-              setCurrentQuestion(0);
-            }}
-          />
+          <div className="card-container">
+            {interviews.map((item, index) => (
+              <InterviewCard
+                key={index}
+                interview={item}
+                onSelect={setSelectedInterview}
+              />
+            ))}
+          </div>
         </>
       )}
 
-      {selectedInterview && difficulty && !showResult && (
-        <h2>{selectedInterview}</h2>
+      {selectedInterview && !difficulty && (
+        <div className="difficulty-container">
+          <div className="difficulty-header">
+            <h1>Select Difficulty Level</h1>
+            <p>Choose a difficulty level for your {selectedInterview}.</p>
+          </div>
+
+          <div className="difficulty-options">
+            {/* Easy */}
+            <label className="difficulty-card">
+              <input
+                type="radio"
+                name="difficulty"
+                value="Easy"
+                onChange={(e) => {
+                  const selectedDifficulty = e.target.value;
+
+                  setDifficulty(selectedDifficulty);
+
+                  const questions =
+                    interviewQuestions[selectedInterview][selectedDifficulty];
+
+                  setQuestionList(shuffleQuestion(questions));
+                  setCurrentQuestion(0);
+                }}
+              />
+
+              <div className="difficulty-icon">🌱</div>
+
+              <div className="difficulty-content">
+                <h3>Easy</h3>
+                <p>Fundamentals and basic concepts.</p>
+              </div>
+
+              <span className="difficulty-arrow">→</span>
+            </label>
+
+            {/* Medium */}
+            <label className="difficulty-card">
+              <input
+                type="radio"
+                name="difficulty"
+                value="Medium"
+                onChange={(e) => {
+                  const selectedDifficulty = e.target.value;
+
+                  setDifficulty(selectedDifficulty);
+
+                  const questions =
+                    interviewQuestions[selectedInterview][selectedDifficulty];
+
+                  setQuestionList(shuffleQuestion(questions));
+                  setCurrentQuestion(0);
+                }}
+              />
+
+              <div className="difficulty-icon">⚡</div>
+
+              <div className="difficulty-content">
+                <h3>Medium</h3>
+                <p>Practical concepts and deeper understanding.</p>
+              </div>
+
+              <span className="difficulty-arrow">→</span>
+            </label>
+
+            {/* Hard */}
+            <label className="difficulty-card">
+              <input
+                type="radio"
+                name="difficulty"
+                value="Hard"
+                onChange={(e) => {
+                  const selectedDifficulty = e.target.value;
+
+                  setDifficulty(selectedDifficulty);
+
+                  const questions =
+                    interviewQuestions[selectedInterview][selectedDifficulty];
+
+                  setQuestionList(shuffleQuestion(questions));
+                  setCurrentQuestion(0);
+                }}
+              />
+
+              <div className="difficulty-icon">🔥</div>
+
+              <div className="difficulty-content">
+                <h3>Hard</h3>
+                <p>Advanced concepts and challenging questions.</p>
+              </div>
+
+              <span className="difficulty-arrow">→</span>
+            </label>
+          </div>
+        </div>
       )}
 
       {selectedInterview && difficulty && !showResult && (
-        <div>
-          {!showResult && (
-            <>
-              <h3>
-                Question: {currentQuestion + 1} / {questionList.length}
-              </h3>
+        <div className="interview-page">
+          {/* Interview Header */}
+          <div className="interview-header">
+            <div>
+              <p className="interview-label">{selectedInterview}</p>
 
-              <p>{questionList[currentQuestion]}</p>
-              <br />
-            </>
-          )}
+              <h2>Technical Interview</h2>
+            </div>
 
-          {!(
-            currentQuestion ===
-              interviewQuestions[selectedInterview][difficulty].length - 1 &&
-            submitted
-          ) && (
-            <>
-              <input
-                className="input"
-                type="text"
-                placeholder="Type your answer"
+            <div className="difficulty-badge">{difficulty}</div>
+          </div>
+
+          {/* Progress */}
+          <div className="question-progress">
+            <div className="progress-info">
+              <span>Question {currentQuestion + 1}</span>
+              <span>{questionList.length} Questions</span>
+            </div>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${
+                    ((currentQuestion + 1) / questionList.length) * 100
+                  }%`,
+                }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Question */}
+          <div className="question-card">
+            <div className="question-number">
+              Question {currentQuestion + 1}
+            </div>
+
+            <h3>{questionList[currentQuestion]}</h3>
+          </div>
+
+          {/* Answer Area */}
+          {!(currentQuestion === questionList.length - 1 && submitted) && (
+            <div className="answer-section">
+              <label htmlFor="answer">Your Answer</label>
+
+              <textarea
+                id="answer"
+                className="answer-input"
+                placeholder="Type your answer here..."
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
+                disabled={submitted || evaluating}
               />
 
-              <button
-                className="submit"
-                onClick={handleSubmit}
-                disabled={submitted || evaluating}
-              >
-                {evaluating ? "Evaluating..." : "Submit"}
-              </button>
-            </>
+              <div className="answer-actions">
+                <button
+                  className="submit-answer-btn"
+                  onClick={handleSubmit}
+                  disabled={submitted || evaluating}
+                >
+                  {evaluating ? "🤖 Evaluating..." : "Submit Answer →"}
+                </button>
+
+                {!submitted && (
+                  <button
+                    className="skip-btn"
+                    onClick={handleNextQuestion}
+                    disabled={evaluating}
+                  >
+                    Skip Question
+                  </button>
+                )}
+              </div>
+            </div>
           )}
 
-          {!interviewCompleted && (
-            <button
-              className="next"
-              onClick={handleNextQuestion}
-              disabled={evaluating}
-            >
-              {submitted ? "Next Question →" : "Skip"}
+          {/* AI Evaluation */}
+          {evaluation && !showResult && (
+            <div className="evaluation-box">
+              <div className="evaluation-header">
+                <div className="evaluation-icon">🤖</div>
+
+                <div>
+                  <h3>AI Evaluation</h3>
+                  <p>Here's how your answer performed</p>
+                </div>
+              </div>
+
+              <div className="evaluation-score">
+                <span>Score</span>
+
+                <strong>
+                  {evaluation.score}
+                  <small>/10</small>
+                </strong>
+              </div>
+
+              <div className="evaluation-feedback">
+                <h4>Feedback</h4>
+
+                <p>{evaluation.feedback}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Next Question */}
+          {submitted && !interviewFinished && (
+            <button className="next-question-btn" onClick={handleNextQuestion}>
+              Next Question →
             </button>
           )}
 
-          {evaluation && !showResult && (
-            <div className="evaluation-box">
-              <h3>🤖 AI Evaluation</h3>
-
-              <p>
-                <strong>Score:</strong> {evaluation.score}/10
-              </p>
-
-              <p>
-                <strong>Feedback:</strong> {evaluation.feedback}
-              </p>
-            </div>
+          {/* Finish Interview */}
+          {interviewFinished && (
+            <button
+              className="finish-interview-btn"
+              onClick={() => setShowResult(true)}
+            >
+              Finish Interview →
+            </button>
           )}
         </div>
       )}
 
-      {interviewFinished && !showResult && (
-        <button className="next" onClick={() => setShowResult(true)}>
-          Finish Interview →
-        </button>
-      )}
-
       {showResult && (
-        <>
-          <div className="result-box">
-            <h2>🎉 Interview Completed!</h2>
-            <br />
-            <h3>Name: {name} </h3>
-            <p>Interview: {selectedInterview}</p>
-            <p>Difficulty Level: {difficulty}</p>
-            <br />
-            <hr />
-            {/* <h2>Results:</h2> */}
-            <br />
-            <p>
-              Total Questions:{" "}
-              {interviewQuestions[selectedInterview][difficulty].length}
-            </p>
-            <p>
-              Score: {score} / {questionList.length * 10}
-            </p>
-            <p> Percentage: {percentage.toFixed(0)}% </p>
-            <br />
-            <p>
-              {percentage >= 80
-                ? "Excellent Performance 🚀"
-                : percentage >= 60
-                  ? "Good Performance 👍"
-                  : "Keep Practicing 💪"}
-            </p>
-            <br />
+        <div className="result-page">
+          {/* Result Header */}
+          <div className="result-header">
+            <div className="result-icon">🎉</div>
+
+            <h1>Interview Completed!</h1>
+
+            <p>Here's your AI-powered interview performance report.</p>
+          </div>
+
+          {/* Candidate Info */}
+          <div className="candidate-card">
+            <div className="candidate-info">
+              <span className="info-label">Candidate</span>
+              <strong>{name}</strong>
+            </div>
+
+            <div className="candidate-info">
+              <span className="info-label">Interview</span>
+              <strong>{selectedInterview}</strong>
+            </div>
+
+            <div className="candidate-info">
+              <span className="info-label">Difficulty</span>
+              <span className="result-difficulty">{difficulty}</span>
+            </div>
+          </div>
+
+          {/* Score Section */}
+          <div className="score-card">
+            <div className="score-main">
+              <span>Overall Score</span>
+
+              <strong>
+                {score}
+                <small> / {questionList.length * 10}</small>
+              </strong>
+            </div>
+
+            <div className="percentage-circle">
+              <span>{percentage.toFixed(0)}%</span>
+              <small>Score</small>
+            </div>
+          </div>
+
+          {/* Performance */}
+          <div className="performance-card">
+            <div className="performance-icon">
+              {percentage >= 80 ? "🚀" : percentage >= 60 ? "👍" : "💪"}
+            </div>
+
+            <div>
+              <h3>
+                {percentage >= 80
+                  ? "Excellent Performance"
+                  : percentage >= 60
+                    ? "Good Performance"
+                    : "Keep Practicing"}
+              </h3>
+
+              <p>
+                {percentage >= 80
+                  ? "You demonstrated strong technical understanding."
+                  : percentage >= 60
+                    ? "You have a good foundation. Keep improving your weak areas."
+                    : "Keep practicing the fundamentals and strengthen your concepts."}
+              </p>
+            </div>
+          </div>
+
+          {/* Question Breakdown */}
+          <div className="breakdown-card">
+            <div className="breakdown-header">
+              <h2>Question Breakdown</h2>
+              <span>{answers.length} Answers</span>
+            </div>
+
+            <div className="answer-list">
+              {answers.map((item, index) => (
+                <div className="answer-result" key={index}>
+                  <div className="answer-result-top">
+                    <span className="question-index">Q{index + 1}</span>
+
+                    <span className="question-score">{item.score}/10</span>
+                  </div>
+
+                  <h4>{item.question}</h4>
+
+                  <p className="user-answer">
+                    <strong>Your Answer:</strong> {item.answer}
+                  </p>
+
+                  <p className="ai-feedback">
+                    <strong>AI Feedback:</strong> {item.feedback}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="result-actions">
+            <button className="start-new-btn" onClick={handleStartNew}>
+              Start New Interview
+            </button>
 
             <button
-              onClick={handleStartNew}
-              style={{ backgroundColor: "yellow", color: "black" }}
-            >
-              {" "}
-              Start New{" "}
-            </button>
-            <button
+              className="save-result-btn"
               onClick={finalSubmition}
               disabled={finalSubmitted}
-              style={{
-                backgroundColor: "green",
-                color: "black",
-                opacity: finalSubmitted ? 0.5 : 1,
-              }}
             >
-              {finalSubmitted ? "Submitted ✓" : "Submit"}
+              {finalSubmitted ? "Saved ✓" : "Save Interview Result"}
             </button>
-
-            {finalSubmitted && (
-              <p>Your current performance has been saved successfully ✅</p>
-            )}
           </div>
-        </>
+
+          {/* Saved Message */}
+          {finalSubmitted && (
+            <p className="saved-message">
+              Your interview performance has been saved successfully ✅
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

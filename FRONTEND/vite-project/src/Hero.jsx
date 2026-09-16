@@ -1,44 +1,77 @@
-import { useState } from "react";
+function Hero({ name, setName, started, setStarted }) {
+  return (
+    <div className="hero-section">
 
-function Hero({name, setName, started, setStarted, selectedInterview}) {
-    return (
-        <div className="top-content">
-        
-          {/* {!started && <h1>Mock Interview Platform</h1>} */}
+      {!started && (
+        <>
+          <div className="hero-badge">
+            ✨ Next-Gen Technical Interview Readiness
+          </div>
 
-          {!started && (
-           <> 
-              <h4>✨Next-Gen Technical Interview Readiness</h4>
-              <h1>Practice Interviews. Build <br /><br />Confidence. Get Hired.</h1>
-              <p>Simulate realistic technical and behavioral interviews with structured<br /> instant feedback, curated domain questions, and score tracking.</p>
-              <br /><br /><br />
-              <div className="name-card">
-                <label htmlFor="name" className="name"><b>Name: </b></label>
-                <input
-                type="text"
-                placeholder="Enter your name"
-                onChange={(e) => setName(e.target.value)}
-               />
+          <h1 className="hero-title">
+            Practice Interviews.
+            <br />
+            Build Confidence.
+            <br />
+            Get Hired.
+          </h1>
 
-               <br /><br />
+          <p className="hero-description">
+            Simulate realistic technical interviews with AI-powered evaluation,
+            <br />
+            personalized feedback, and performance tracking.
+          </p>
 
-               <button 
-               className="startInterview-btn"
-               onClick={() => setStarted(true)}
-               disabled={!name.trim()}
-               >
-               Start Interview
-               </button>
+          <div className="name-card">
+            <div className="name-card-header">
+              <span className="name-icon">👋</span>
+
+              <div>
+                <h3>Let's get started</h3>
+                <p>Enter your name to begin your interview.</p>
               </div>
-            </>
-          )} <br /><br /><br /><br />
+            </div>
 
-              {started && !selectedInterview && (
-                <h2>Welcome {name} 👋</h2>
-               )}
-  
-        </div>
-    );
+            <label htmlFor="name">Your Name</label>
+
+            <input
+              id="name"
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <button
+              className="startInterview-btn"
+              onClick={() => setStarted(true)}
+              disabled={!name.trim()}
+            >
+              Start Interview
+              <span>→</span>
+            </button>
+          </div>
+
+          <div className="hero-features">
+            <div>
+              <span>🤖</span>
+              <p>AI Evaluation</p>
+            </div>
+
+            <div>
+              <span>🎯</span>
+              <p>Skill-Based Practice</p>
+            </div>
+
+            <div>
+              <span>📊</span>
+              <p>Track Performance</p>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default Hero;
