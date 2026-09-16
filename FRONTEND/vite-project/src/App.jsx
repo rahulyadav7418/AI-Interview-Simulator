@@ -162,40 +162,40 @@ function App() {
     const currentQuestionText = questionList[currentQuestion];
 
     try {
-  const res = await axios.post("http://localhost:8080/evaluate", {
-    question: currentQuestionText,
-    answer: currentAnswer,
-  });
+      const res = await axios.post("http://localhost:8080/evaluate", {
+        question: currentQuestionText,
+        answer: currentAnswer,
+      });
 
-  console.log("AI Evaluation:", res.data.evaluation);
+      console.log("AI Evaluation:", res.data.evaluation);
 
-  const evaluationData = JSON.parse(res.data.evaluation);
+      const evaluationData = JSON.parse(res.data.evaluation);
 
-  setEvaluation(evaluationData);
-  setScore((prev) => prev + evaluationData.score);
+      setEvaluation(evaluationData);
+      setScore((prev) => prev + evaluationData.score);
 
-  setAnswers((prev) => [
-    ...prev,
-    {
-      question: currentQuestionText,
-      answer: currentAnswer,
-      score: evaluationData.score,
-      feedback: evaluationData.feedback,
-    },
-  ]);
+      setAnswers((prev) => [
+        ...prev,
+        {
+          question: currentQuestionText,
+          answer: currentAnswer,
+          score: evaluationData.score,
+          feedback: evaluationData.feedback,
+        },
+      ]);
 
-  if (currentQuestion === questionList.length - 1) {
-    setInterviewFinished(true);
-  }
+      if (currentQuestion === questionList.length - 1) {
+        setInterviewFinished(true);
+      }
 
-  setEvaluating(false);
-  setSubmitted(true);
-  setAnswer("");
-
-} catch (err) {
-  console.log("AI Evaluation Error:", err);
-  setEvaluating(false);
-}
+      setEvaluating(false);
+      setSubmitted(true);
+      setAnswer("");
+    } catch (err) {
+      console.log("AI Evaluation Error:", err);
+      setEvaluating(false);
+    }
+  };
 
   const handleStartNew = () => {
     setName("");
