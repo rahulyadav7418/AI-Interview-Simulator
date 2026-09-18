@@ -145,6 +145,8 @@ function App() {
       setAnswer("");
       setSubmitted(false);
       setEvaluation("");
+    } else {
+      setInterviewFinished(true);
     }
   };
 
@@ -332,8 +334,7 @@ function App() {
       {started && interviewMode === "skills" && !selectedInterview && (
         <>
           <div className="interview-selection-header">
-            <h2>What type of interview?</h2>
-            <p>Choose a skill and start practicing.</p>
+            <h3>Choose a skill and start practicing.</h3>
           </div>
 
           <div className="card-container">
