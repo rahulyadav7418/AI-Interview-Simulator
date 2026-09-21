@@ -1,10 +1,14 @@
 require("dotenv").config();
-Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`;
 
 const express = require("express");
 const app = express();
+
 const mongoose = require("mongoose");
 const Interview = require("./models/interview.js");
+const User = require("./models/user.js");
+
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 // const ollama = require("ollama").default;
 const axios = require("axios");
@@ -35,6 +39,53 @@ app.post("/interviews", async (req, res) => {
   const newInterview = new Interview(req.body);
   await newInterview.save();
   res.send("Data Saved");
+});
+
+//Create Signup API
+app.post("/signup", async (req, res) => {
+  const {name, email, password} = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser = new User({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  await newUser.save();
+
+  res.send("user registered successfully");
+});
+
+//Login
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).send("User not found");
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!isPasswordCorrect) {
+    return res.status(400).send("Invalid password");
+  }
+
+  const token = jwt.sign(
+    { id: user._id },
+    process.env.JWT_SECRET
+  );
+
+  res.json({
+    message: "Login successful",
+    token: token
+  });
 });
 
 //AI Evaluation/ by using Ollama
