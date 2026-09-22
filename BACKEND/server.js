@@ -6,6 +6,7 @@ const app = express();
 const mongoose = require("mongoose");
 const Interview = require("./models/interview.js");
 const User = require("./models/user.js");
+const auth = require("./middleware/auth.js");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -88,7 +89,7 @@ app.post("/login", async (req, res) => {
   });
 });
 
-//AI Evaluation/ by using Ollama
+//AI Evaluation
 app.post("/evaluate", async (req, res) => {
   const { question, answer } = req.body;
 
