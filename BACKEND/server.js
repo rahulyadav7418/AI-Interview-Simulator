@@ -30,21 +30,24 @@ async function main() {
 }
 
 //fetch the data
-app.get("/interviews", async (req, res) => {
+app.get("/interviews", auth, async (req, res) => {
   const data = await Interview.find();
   res.json(data);
 });
 
 //post the data
-app.post("/interviews", async (req, res) => {
-  const newInterview = new Interview(req.body);
+app.post("/interviews", auth, async (req, res) => {
+  const newInterview = new Interview({
+    ...req.body,
+    userId: req.user.id,
+  });
   await newInterview.save();
-  res.send("Data Saved");
+  res.send(newInterview);
 });
 
 //Create Signup API
 app.post("/signup", async (req, res) => {
-  const {name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -69,23 +72,17 @@ app.post("/login", async (req, res) => {
     return res.status(400).send("User not found");
   }
 
-  const isPasswordCorrect = await bcrypt.compare(
-    password,
-    user.password
-  );
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
     return res.status(400).send("Invalid password");
   }
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
   res.json({
     message: "Login successful",
-    token: token
+    token: token,
   });
 });
 
