@@ -31,7 +31,8 @@ async function main() {
 
 //fetch the data
 app.get("/interviews", auth, async (req, res) => {
-  const data = await Interview.find();
+  const data = await Interview.find({ userId: req.user.id });
+
   res.json(data);
 });
 
@@ -41,8 +42,10 @@ app.post("/interviews", auth, async (req, res) => {
     ...req.body,
     userId: req.user.id,
   });
+
   await newInterview.save();
-  res.send(newInterview);
+
+  res.send("Data Saved");
 });
 
 //Create Signup API
@@ -87,7 +90,7 @@ app.post("/login", async (req, res) => {
 });
 
 //AI Evaluation
-app.post("/evaluate", async (req, res) => {
+app.post("/evaluate", auth, async (req, res) => {
   const { question, answer } = req.body;
 
   try {
