@@ -4,6 +4,8 @@ import InterviewCard from "./InterviewCard";
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 // const interviews = [
 //   "Frontend Interview",
@@ -132,6 +134,9 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
   const percentage =
     selectedInterview && difficulty
       ? (score /
@@ -164,10 +169,20 @@ function App() {
     const currentQuestionText = questionList[currentQuestion];
 
     try {
-      const res = await axios.post("http://localhost:8080/evaluate", {
-        question: currentQuestionText,
-        answer: currentAnswer,
-      });
+      const token = sessionStorage.getItem("token");
+
+      const res = await axios.post(
+        "http://localhost:8080/evaluate",
+        {
+          question: currentQuestionText,
+          answer: currentAnswer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       console.log("AI Evaluation:", res.data.evaluation);
 
@@ -220,23 +235,33 @@ function App() {
   const finalSubmition = () => {
     if (finalSubmitted) return;
 
-    axios
-      .post("http://localhost:8080/interviews", {
-        name,
-        interviewType: selectedInterview,
-        difficulty: difficulty,
-        answers: answers,
-        score: score,
-        percentage: percentage.toFixed(0),
-      })
-      .then(() => {
-        console.log("Saved Successfully");
-        setFinalSubmitted(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    const token = sessionStorage.getItem("token");
+
+axios
+  .post(
+    "http://localhost:8080/interviews",
+    {
+      name,
+      interviewType: selectedInterview,
+      difficulty,
+      answers,
+      score,
+      percentage: percentage.toFixed(0),
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  .then(() => {
+    console.log("Saved Successfully");
+    setFinalSubmitted(true);
+  })
+  .catch((err) => {
+    console.log("Save Result Error:", err.response?.data || err.message);
+  });
+}
 
   const interviewCompleted =
     selectedInterview &&
@@ -250,6 +275,24 @@ function App() {
   //   selectedInterview,
   //   difficulty,
   // }); //it is checking that rare case
+
+  if (!isLoggedIn) {
+    if (showSignup) {
+      return (
+        <Signup
+          onSignupSuccess={() => setShowSignup(false)}
+          onShowLogin={() => setShowSignup(false)}
+        />
+      );
+    }
+
+    return (
+      <Login
+        onLoginSuccess={() => setIsLoggedIn(true)}
+        onShowSignup={() => setShowSignup(true)}
+      />
+    );
+  }
 
   return (
     <div>
@@ -293,7 +336,7 @@ function App() {
 
       {started && !interviewMode && (
         <div className="mode-container">
-          <h2>What type of interview?</h2>
+          <h2>Select Interview Mode</h2>
 
           <div className="mode-options">
             <div

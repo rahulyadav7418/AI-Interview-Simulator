@@ -96,8 +96,9 @@ app.post("/evaluate", auth, async (req, res) => {
   try {
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
+
       {
-        model: "nex-agi/nex-n2.5-pro:free",
+        model: "openrouter/free",
         messages: [
           {
             role: "user",
@@ -124,6 +125,7 @@ app.post("/evaluate", auth, async (req, res) => {
         },
       },
     );
+    console.log("OpenRouter response:", response.data);
 
     const evaluation = response.data.choices[0].message.content;
 
@@ -139,6 +141,7 @@ app.post("/evaluate", auth, async (req, res) => {
     });
   }
 });
+
 
 //destroy
 app.delete("/interviews/:id", async (req, res) => {
