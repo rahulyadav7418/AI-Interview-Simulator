@@ -1,248 +1,361 @@
 # 🤖 AI Interview Simulator
+### AI-Powered Technical Interview Preparation Platform
 
-An AI-powered technical interview practice platform built with the MERN stack.
+An AI-powered technical interview preparation platform built using the **MERN stack**, integrating **OpenRouter AI** for automated answer evaluation and **JWT authentication** for user access management.
 
-The application allows users to practice technical interviews based on different technical skills and difficulty levels, submit their answers, and receive AI-powered evaluation, scores, and feedback.
+The platform enables candidates to practice technical interviews across multiple domains, answer skill-based questions, and receive AI-generated scores and feedback to evaluate their technical knowledge.
 
----
-
-## 🚀 Project Status
-
-🚧 **Currently in Development**
-
-The core skill-based interview flow, AI-powered answer evaluation, result generation, and MongoDB result storage have been implemented.
-
-Additional features such as authentication, dashboard, profile, and resume-based interviews are planned.
+<p align="center">
+  <b>Practice • Evaluate • Improve</b>
+</p>
 
 ---
 
-## ✨ Features
+## 🚀 Project Overview
 
-### 🎯 Skill-Based Interviews
+Preparing for technical interviews requires consistent practice, understanding of concepts, and meaningful feedback.
 
-Users can choose a technical skill and practice interview questions based on that skill.
+The AI Interview Simulator aims to make this process more accessible by providing an interactive interview environment where candidates can:
 
-Currently supported:
+- Practice technical interviews based on specific skills.
+- Select questions according to difficulty levels.
+- Submit answers and receive AI-powered evaluations.
+- Understand their performance through scores and feedback.
+- Create accounts and access authenticated application features.
+- Store completed interview results in MongoDB.
 
-- Java
-- Frontend
-- Backend
-- AI
+**Project Status:** 🚧 Actively Under Development
 
 ---
 
-### 📊 Difficulty Levels
+## ✨ Key Features
 
-Each skill-based interview provides three difficulty levels:
+### 🔐 1. User Authentication & Authorization
 
-- 🌱 Easy — Fundamentals and basic concepts
-- ⚡ Medium — Practical concepts and deeper understanding
-- 🔥 Hard — Advanced concepts and challenging questions
+Implemented an authentication system using JWT and bcrypt.
+
+- User registration and login.
+- Password hashing using bcrypt.
+- JWT-based authentication.
+- Token management using browser session storage.
+- Authentication middleware.
+- Protected API endpoints.
+- Bearer token authorization.
+
+### 🎯 2. Skill-Based Interview Practice
+
+Users can select a technical domain and practice relevant interview questions.
+
+**Currently Supported Domains:**
+
+| Domain | Description |
+|---|---|
+| Java | Core Java and programming fundamentals |
+| Frontend | Frontend development concepts |
+| Backend | Backend development concepts |
+| AI | Artificial Intelligence fundamentals |
+
+### 📊 3. Multiple Difficulty Levels
+
+Each interview supports three difficulty levels:
+
+- 🌱 **Easy:** Fundamentals and basic concepts.
+- ⚡ **Medium:** Practical concepts and deeper understanding.
+- 🔥 **Hard:** Advanced concepts and challenging questions.
 
 Questions are randomly selected from the available question set for the selected skill and difficulty.
 
----
+### 🧠 4. AI-Powered Answer Evaluation
 
-### 🤖 AI-Powered Answer Evaluation
+Integrated the OpenRouter API to evaluate user-submitted answers.
 
-After submitting an answer, the application sends the question and user's answer to the backend.
+**Evaluation Process:**
 
-The backend uses an AI model through the OpenRouter API to evaluate the answer.
+- User submits an answer.
+- Backend processes the question and response.
+- Backend communicates with the OpenRouter AI API.
+- AI evaluates the submitted answer.
+- Evaluation results are returned to the frontend.
 
-The AI provides:
+**Evaluation Output:**
 
-- Score out of 10
-- Feedback on the answer
+- Score out of 10.
+- AI-generated feedback.
 
----
+### 📈 5. Interview Performance Report
 
-### 📈 Interview Results
+After completing an interview, users can view a performance report containing:
 
-After completing the interview, users can view their performance report.
+- Candidate name.
+- Interview type.
+- Difficulty level.
+- Overall score.
+- Percentage.
+- Individual question scores.
+- Submitted answers.
+- AI-generated feedback.
 
-The result page displays:
+### 💾 6. MongoDB Result Management
 
-- Candidate name
-- Interview type
-- Difficulty level
-- Overall score
-- Percentage
-- Individual question scores
-- User's answers
-- AI-generated feedback
+Integrated MongoDB using Mongoose to persist completed interview results.
 
----
+Stored information includes:
 
-### 💾 MongoDB Result Storage
+- Candidate details.
+- Interview category and difficulty.
+- Questions and answers.
+- Individual evaluation scores.
+- AI-generated feedback.
+- Overall score and percentage.
 
-Completed interview results can be stored in MongoDB.
+### ⚡ 7. Interactive Interview Experience
 
-Each interview record contains information such as:
+The interview interface includes:
 
-- Candidate name
-- Interview type
-- Difficulty
-- Questions
-- Answers
-- Individual scores
-- AI feedback
-- Overall score
-- Percentage
-
----
-
-### 📊 Question Progress
-
-The interview interface provides:
-
-- Current question number
-- Total number of questions
-- Progress bar
-- Answer submission
-- AI evaluation status
-- Next question navigation
+- Question navigation.
+- Current question tracking.
+- Progress indicator.
+- Answer submission.
+- AI evaluation status.
+- Score and feedback display.
+- Final interview summary.
 
 ---
 
-## 🔄 Application Flow
+## 🏗️ System Architecture
+
+The application follows a client-server architecture.
 
 ```text
-                Enter Name
-                    ↓
-           Choose Interview Mode
-                    ↓
-          Skills Based Interview
-                    ↓
-             Choose Skill
-                    ↓
-          Choose Difficulty
-                    ↓
-            Start Interview
-                    ↓
-             Answer Question
-                    ↓
-             Submit Answer
-                    ↓
-             React Frontend
-                    ↓
-             Express Backend
-                    ↓
-             OpenRouter AI
-                    ↓
-          AI Score + Feedback
-                    ↓
-             Display Result
-                    ↓
-             Next Question
-                    ↓
-           Complete Interview
-                    ↓
-             Result Page
-                    ↓
-             Save Result
-                    ↓
-               MongoDB
+                 USER
+                  |
+                  ▼
+          REACT FRONTEND
+                  |
+          Axios / REST API
+                  |
+                  ▼
+          EXPRESS BACKEND
+                  |
+       ┌──────────┼───────────┐
+       |          |           |
+       ▼          ▼           ▼
+  Authentication AI Service  Interview
+       |          |           |
+       ▼          ▼           ▼
+     JWT      OpenRouter    Mongoose
+       |          |           |
+       |          |           ▼
+       |          |        MongoDB
+       |          |           |
+       └──────────┴───────────┘
+                  |
+                  ▼
+           JSON RESPONSE
+                  |
+                  ▼
+           REACT FRONTEND
+                  |
+                  ▼
+         RESULTS & FEEDBACK
+```
 
-_________________________________________________________________
+### Authentication Flow
 
-🧠 How AI Evaluation Works
+```text
+             REACT FRONTEND
+                    |
+             ┌──────┴──────┐
+             ▼             ▼
+           SIGNUP         LOGIN
+             |             |
+             ▼             ▼
+        POST /signup   POST /login
+             |             |
+             ▼             ▼
+         EXPRESS BACKEND
+                    |
+                    ▼
+            USER VALIDATION
+                    |
+              ┌─────┴─────┐
+              ▼           ▼
+          HASH PASSWORD  VERIFY PASSWORD
+              |           |
+              └─────┬─────┘
+                    ▼
+                 MongoDB
+                    |
+                    ▼
+             GENERATE JWT
+                    |
+                    ▼
+           RETURN TOKEN TO REACT
+                    |
+                    ▼
+            sessionStorage
+                    |
+                    ▼
+          PROTECTED API REQUEST
+                    |
+                    ▼
+         AUTHENTICATION MIDDLEWARE
+                    |
+                    ▼
+               VERIFY JWT
+                    |
+             ┌──────┴──────┐
+             ▼             ▼
+         VALID TOKEN   INVALID TOKEN
+             |             |
+             ▼             ▼
+        ALLOW ACCESS   401 RESPONSE
+```
 
-The answer evaluation process works as follows:
+---
 
-The user enters an answer in the React frontend.
-React sends the question and answer to the Express backend.
-The Express backend receives the request.
-The backend sends the question and answer to the OpenRouter AI API.
-The AI evaluates the answer.
-The AI returns a score from 0–10 and feedback.
-The backend sends the evaluation back to React.
-React displays the score and feedback.
-The evaluation is added to the interview's answer history.
-The final interview result can be stored in MongoDB.
+## 🔄 AI Evaluation Workflow
 
-__________________________________________________________________
+The application uses an external AI service to evaluate submitted interview answers.
 
-🛠️ Tech Stack
-- Frontend
-- React.js
-- JavaScript
-- HTML
-- CSS
-- Axios
-- Backend
-- Node.js
-- Express.js
-- Axios
-- REST API
-- Database
-- MongoDB
-- Mongoose
-- AI
-- OpenRouter API
-- Tools
-- Git
-- GitHub
-- VS Code
-- MongoDB
+```text
+User Submits Answer
+        |
+        ▼
+React Frontend
+        |
+        ▼
+POST /evaluate
+        |
+        ▼
+Express Backend
+        |
+        ▼
+OpenRouter API
+        |
+        ▼
+AI Answer Evaluation
+        |
+        ▼
+Score + Feedback
+        |
+        ▼
+Express Backend
+        |
+        ▼
+React Frontend
+        |
+        ▼
+Display Evaluation
+        |
+        ▼
+Update Interview Progress
+        |
+        ▼
+Generate Final Result
+        |
+        ▼
+Save Result in MongoDB
+```
 
-____________________________________________________________________
+---
 
-📁 Project Structure
+## 🛠️ Technology Stack
 
+| Category | Technologies |
+|---|---|
+| Frontend | React.js, JavaScript, HTML5, CSS3 |
+| API Communication | Axios, REST APIs |
+| Backend | Node.js, Express.js |
+| Database | MongoDB, Mongoose |
+| Authentication | JWT, bcrypt |
+| AI Integration | OpenRouter API |
+| Development Tools | VS Code, Git, GitHub |
+| Database Tools | MongoDB Community Server |
+
+---
+
+## 📁 Project Structure
+
+```text
 AI-Interview-Simulator/
 │
-├── frontend/
-│   │
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Hero.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   └── InterviewCard.jsx
-│   │   │
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   └── ...
-│   │
-│   ├── package.json
-│   └── ...
+├── FRONTEND/
+│   └── vite-project/
+│       ├── src/
+│       │   ├── components/
+│       │   │   ├── Login.jsx
+│       │   │   ├── Signup.jsx
+│       │   │   ├── Navbar.jsx
+│       │   │   ├── Hero.jsx
+│       │   │   └── InterviewCard.jsx
+│       │   │
+│       │   ├── App.jsx
+│       │   ├── App.css
+│       │   └── ...
+│       │
+│       ├── package.json
+│       └── ...
 │
 ├── backend/
-│   │
 │   ├── models/
+│   │   ├── User.js
 │   │   └── Interview.js
+│   │
+│   ├── middleware/
+│   │   └── authMiddleware.js
 │   │
 │   ├── server.js
 │   ├── package.json
-│   └── ...
+│   └── .env
 │
 ├── .gitignore
 └── README.md
+```
 
-__________________________________________________________________
-🔌 API Endpoints
+*Note: The structure highlights the main application components. Verify the backend folder and filenames against the actual repository before publishing.*
 
-Evaluate Interview Answer
-POST /evaluate
+---
 
-Used to send an interview question and user's answer to the backend for AI evaluation.
+## 🔌 API Documentation
 
-Example request:
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/signup` | Register a new user |
+| POST | `/login` | Authenticate an existing user |
+| POST | `/evaluate` | Evaluate an interview answer using AI |
+| GET | `/interviews` | Retrieve interview results |
+| POST | `/interviews` | Save completed interview results |
 
+### Authentication Header
+
+Protected endpoints use JWT Bearer authentication.
+
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
+
+### Example: Login Request
+
+```json
+{
+  "email": "candidate@example.com",
+  "password": "your_password"
+}
+```
+
+### Example: AI Evaluation Request
+
+```json
 {
   "question": "What is React?",
   "answer": "React is a JavaScript library used for building user interfaces."
 }
+```
 
-The backend processes the request through the OpenRouter API and returns the AI evaluation.
-____________________________________________________________________________
-## Save Interview Result
+### Example: Interview Result
 
-POST /interviews
-
-Used to save completed interview results to MongoDB.
-
-The stored data includes:
-
+```json
 {
   "name": "Candidate Name",
   "interviewType": "Java Interview",
@@ -251,164 +364,176 @@ The stored data includes:
   "score": 25,
   "percentage": 83
 }
-____________________________________________________________________________
-🔐 Environment Variables
+```
 
-The backend requires an OpenRouter API key.
+---
 
-Create a .env file inside the backend directory:
+## ⚙️ Getting Started
 
-OPENROUTER_API_KEY=your_api_key_here
-Important
+Follow these instructions to run the project locally.
 
-Never upload your .env file or API key to GitHub.
+### Prerequisites
 
-Make sure .env is included in .gitignore.
-______________________________________________________________________________
-⚙️ Installation & Setup
+- Node.js and npm.
+- MongoDB Community Server or a MongoDB connection.
+- OpenRouter API key.
+- Git.
 
-1. Clone the Repository
+### 1. Clone Repository
+
+```bash
 git clone https://github.com/rahulyadav7418/AI-Interview-Simulator.git
 
-2. Navigate to the Project
 cd AI-Interview-Simulator
+```
 
-3. Install Frontend Dependencies
-cd frontend
+### 2. Install Frontend Dependencies
+
+```bash
+cd FRONTEND/vite-project
 npm install
+```
 
-4. Install Backend Dependencies
-Open another terminal:
+### 3. Install Backend Dependencies
+
+Open another terminal and navigate to the backend directory:
+
+```bash
 cd backend
 npm install
+```
 
-5. Configure Environment Variables
+### 4. Configure Environment Variables
 
-Create:
-backend/.env
+Create a `.env` file inside the backend directory.
 
-Add:
-OPENROUTER_API_KEY=your_api_key_here
+```env
+OPENROUTER_API_KEY=your_openrouter_api_key
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
 
-6. Start the Backend
+Use the exact variable names configured in your backend code.
+
+**Security:** Never commit API keys, database credentials, or JWT secrets to GitHub.
+
+### 5. Start Backend
+
+```bash
 npm start
-or use the command configured in your package.json.
+```
 
-7. Start the Frontend
+Use the start command configured in your backend `package.json`.
+
+### 6. Start Frontend
 
 Inside the frontend directory:
+
+```bash
 npm run dev
-The exact command may depend on the frontend setup.
-______________________________________________________________
-🎨 User Interface
+```
 
-The application currently includes:
+The application will be available at the local Vite development URL shown in your terminal.
 
-- Landing page
-- Name input
-- Interview mode selection
-- Skill selection
-- Difficulty selection
-- Interview question interface
-- Question progress indicator
-- Answer input
-- AI evaluation display
-- Score display
-- Feedback display
-- Interview result page
-- Interview result breakdown
-- Save result functionality
-________________________________________________________________
-🔮 Future Improvements
+---
 
-The project is actively being developed.
+## 📌 Development Progress
 
-Planned features include:
+| Feature | Status |
+|---|---|
+| MERN Application Setup | ✅ Completed |
+| Skill-Based Interviews | ✅ Completed |
+| Difficulty Selection | ✅ Completed |
+| Question Navigation | ✅ Completed |
+| AI Answer Evaluation | ✅ Completed |
+| Interview Result Generation | ✅ Completed |
+| MongoDB Result Storage | ✅ Completed |
+| User Registration | ✅ Implemented |
+| User Login | ✅ Implemented |
+| Password Hashing | ✅ Implemented |
+| JWT Authentication | ✅ Implemented |
+| Authentication Middleware | ✅ Implemented |
+| Protected API Integration | ✅ Implemented |
+| User Dashboard | 🔨 Planned |
+| Profile Management | 🔨 Planned |
+| Resume-Based Interviews | 🔨 Planned |
+| Adaptive AI Interviews | 🔨 Planned |
+| Performance Analytics | 🔨 Planned |
+| Voice-Based Interviews | 🔨 Planned |
+| Deployment | 🔨 Planned |
 
-🔐 Authentication
+---
 
-- User signup
-- User login
-- Password hashing
-- Authentication
-- Authorization
-- Protected routes
-- Logout
+## 🔮 Future Roadmap
 
-📊 User Dashboard
+### 📊 Personalized Dashboard
+- Interview history.
+- Average and highest scores.
+- Skill-wise performance.
+- Previous interview reports.
 
-- Interview history
-- Average score
-- Best score
-- Skill-wise performance
-- Previous interview results
-- Performance tracking
+### 📄 Resume-Based Interviews
+- Resume upload.
+- Resume content analysis.
+- Personalized technical questions.
+- Project and experience-based questions.
 
-👤 Profile
+### 🧠 Adaptive AI Interviewer
+- Dynamic question generation.
+- AI-generated follow-up questions.
+- Difficulty adaptation.
+- Detailed performance recommendations.
 
-- User profile
-- Personal information
-- Skills
-- Interview statistics
+### 📈 Performance Analytics
+- Identify weak technical areas.
+- Track improvement over time.
+- Skill-wise performance analysis.
+- Personalized learning recommendations.
 
-📄 Resume-Based Interview
+### 🎙️ Voice-Based Interviews
+Introduce voice interaction to simulate a more realistic technical interview environment.
 
-Users will be able to upload their resume and receive personalized interview questions based on:
+### ☁️ Deployment
+Deploy the application to make the platform accessible to users online.
 
-- Skills
-- Projects
-- Experience
-- Resume content
+---
 
-🧠 Adaptive AI Interview
+## 🎯 What I Learned
 
-The AI interviewer will eventually be improved to:
+Building this project has helped me gain practical experience with:
 
-- Generate dynamic questions
-- Ask follow-up questions
-- Adapt questions based on previous answers
-- Provide more detailed interview feedback
+- Developing full-stack applications using the MERN stack.
+- Designing REST APIs using Express.js.
+- Integrating frontend and backend services using Axios.
+- Implementing JWT-based authentication.
+- Understanding password hashing and authentication middleware.
+- Managing application data using MongoDB and Mongoose.
+- Integrating external AI services through APIs.
+- Handling asynchronous API requests and responses.
+- Structuring React components and managing application state.
+- Debugging and integrating multiple application modules.
 
-📈 Performance Analytics
+---
 
-Future versions may include:
+## 👨‍💻 Developer
 
-- Skill-wise analysis
-- Weak topic identification
-- Performance trends
-- Personalized improvement suggestions
+**Rahul Yadav**
 
-🎙️ Voice Interview
-A future version may support voice-based technical interviews.
+B.Tech — Computer Science and Engineering (AI)
 
-☁️ Deployment
-The application will be deployed so that users can access it online.
-____________________________________________________________________
-🧪 Current Development Focus
+GitHub: [rahulyadav7418](https://github.com/rahulyadav7418)
 
-The current development roadmap is:
+---
 
-Core Interview Flow          ✅
-Skill-Based Interviews      ✅
-Difficulty Levels            ✅
-AI Evaluation                ✅
-Result Page                  ✅
-MongoDB Storage              ✅
-Authentication               🔨
-Authorization                🔨
-Dashboard                    🔨
-Profile                      🔨
-Resume-Based Interview       🔨
-Adaptive AI Interview       🔨
-Deployment                   🔨
-______________________________________________________________________
-🎯 Project Goal
+## ⭐ Project
 
-The long-term goal of this project is to build an AI-powered interview preparation platform that helps candidates practice technical interviews, understand their strengths and weaknesses, and improve their interview readiness through personalized AI feedback.
-______________________________________________________________________
-👨‍💻 Author
+If you find this project interesting, consider giving it a star on GitHub!
 
-Rahul Yadav
+**Repository:**  
+https://github.com/rahulyadav7418/AI-Interview-Simulator
 
-GitHub:
-https://github.com/rahulyadav7418
+---
+
+<p align="center">
+  <b>Built with curiosity, consistency, and a passion for learning.</b>
+</p>
